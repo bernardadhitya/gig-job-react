@@ -1,4 +1,5 @@
-import scopes from './scopes';
+//import scopes from './scopes';
+const scopes = require('./scopes');
 var SpotifyWebApi = require('spotify-web-api-node');
 const express = require('express')
 

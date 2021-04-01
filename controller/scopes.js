@@ -20,4 +20,4 @@ const scopes = [
   'user-follow-modify'
 ];
 
-export default scopes;
+module.exports = scopes;
