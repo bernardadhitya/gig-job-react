@@ -1,0 +1,22 @@
+@font-face{
+  font-family: 'galano-grotesque-bold';
+  src: url('../../Assets/fonts/Galano\ Grotesque\ Medium.otf')
+}
+
+.login-page{
+  text-align: center;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'galano-grotesque-bold';
+}
+.login-btn{
+  background-color: #1db954;
+  padding: 4px;
+  cursor: pointer;
+  width: 300px;
+  margin: 0 auto;
+  border-radius: 40px;
+}

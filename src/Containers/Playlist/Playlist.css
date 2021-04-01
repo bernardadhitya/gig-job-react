@@ -1,0 +1,50 @@
+@font-face{
+  font-family: 'galano-grotesque-bold';
+  src: url('../../Assets/fonts/Galano\ Grotesque\ Medium.otf')
+}
+
+.home-page{
+  color: white;
+  font-family: 'galano-grotesque-bold';
+}
+
+.track-card-wrapper{
+  display: flex;
+  align-items: center;
+  background-color: #121212;
+}
+
+.delete-btn{
+  cursor: pointer;
+}
+
+.no-data-page{
+  text-align: center;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paper {
+  color: white;
+  background-color: #121212;
+  border: '2px solid #000';
+}
+
+.confirm-delete-btn{
+  text-align: center;
+  background-color: rgb(235, 73, 73);
+  padding: 4px;
+  cursor: pointer;
+  width: 300px;
+  margin: 0 auto;
+  border-radius: 40px;
+}
