@@ -1,21 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Login.css';
-import spotipuLogo from '../../Assets/spotipu-logo.png'
+import { Button, TextField } from '@material-ui/core';
+import { signIn } from '../../firebase';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const handleLogin = async () => {
-    var win = window.open('http://localhost:8888/login', '_self');
-    win.focus();
+    console.log('email:', email);
+    console.log('password:', password)
+    const user = await signIn(email, password);
+    console.log(user);
   }
 
   return (
     <div className='login-page'>
-      <div>
-        <img src={spotipuLogo} alt='logo' width='200px'/>
-        <h1>Welcome to Spotipu</h1>
-        <p>Please click here to login</p>
-        <div className='login-btn' onClick={() => handleLogin()}>
-          <h3>Login</h3>
+      <div className='login-card'>
+        <h3>Masuk ke PasarKerja</h3>
+        <div className="form-item">
+          <TextField
+            id="email"
+            label="Email"
+            variant="outlined"
+            fullWidth="true"
+            value={email}
+            onChange={(e) => {setEmail(e.target.value)}}
+          />
+        </div>
+        <div className="form-item">
+          <TextField
+            id="password"
+            label="Password"
+            variant="outlined"
+            type="password"
+            fullWidth="true"
+            value={password}
+            onChange={(e) => {setPassword(e.target.value)}}
+          />
+        </div>
+        <div className="form-item" onClick={() => handleLogin()}>
+          <div className="login-btn">
+            Masuk
+          </div>
         </div>
       </div>
     </div>
