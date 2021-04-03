@@ -1,0 +1,13 @@
+.navbar-wrapper{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 40px;
+  z-index: 10;
+  background-color: white;
+  align-content: right;
+  box-shadow: 0px 2px 9px 4px rgba(216,216,216,0.5);
+  -webkit-box-shadow: 0px 2px 9px 4px rgba(216,216,216,0.5);
+  -moz-box-shadow: 0px 2px 9px 4px rgba(216,216,216,0.5);
+}
