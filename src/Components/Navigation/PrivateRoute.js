@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Route } from 'react-router-dom';
-import { fetchUser } from '../../Service';
+import { fetchCurrentUser } from '../../firebase';
 
 const isLoggedIn = async () => {
-  const user = await fetchUser();
+  const user = await fetchCurrentUser();
   return !!user;
 }
 

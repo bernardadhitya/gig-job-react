@@ -1,26 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Login.css';
-import { Button, TextField } from '@material-ui/core';
-import { fetchCurrentUser, signIn } from '../../firebase';
+import { TextField } from '@material-ui/core';
+import { signIn } from '../../firebase';
+import { useHistory } from "react-router-dom"
 
 const Login = () => {
-  const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const currentUser = await fetchCurrentUser();
-      console.log(currentUser);
-      setUser(currentUser);
-    }
-    fetchData();
-  }, [email]);
+  const history = useHistory();
 
   const handleLogin = async () => {
     console.log('email:', email);
-    console.log('password:', password)
-    await signIn(email, password);
+    console.log('password:', password);
+    const user = await signIn(email, password);
+    if (user) {
+      history.push('/home');
+    }
   }
 
   return (
