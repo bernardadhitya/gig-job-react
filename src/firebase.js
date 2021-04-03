@@ -19,6 +19,12 @@ export const signIn = async (email, password) => {
   return userData;
 }
 
+export const fetchCurrentUser = async () => {
+  const isLoggedIn = fireAuth.currentUser;
+  const userData = isLoggedIn ? await getUserByEmail(isLoggedIn.email) : null;
+  return userData;
+}
+
 export const getUserByEmail = async (email) => {
   const response = await db.collection('users').where("email", "==", email).get();
   const data = response.docs.map(doc => {

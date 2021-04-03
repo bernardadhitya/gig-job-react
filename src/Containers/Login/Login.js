@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
 import { Button, TextField } from '@material-ui/core';
-import { signIn } from '../../firebase';
+import { fetchCurrentUser, signIn } from '../../firebase';
 
 const Login = () => {
+  const [user, setUser] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const currentUser = await fetchCurrentUser();
+      console.log(currentUser);
+      setUser(currentUser);
+    }
+    fetchData();
+  }, [email]);
 
   const handleLogin = async () => {
     console.log('email:', email);
     console.log('password:', password)
-    const user = await signIn(email, password);
-    console.log(user);
+    await signIn(email, password);
   }
 
   return (
