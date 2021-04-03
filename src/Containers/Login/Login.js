@@ -3,6 +3,7 @@ import './Login.css';
 import { TextField } from '@material-ui/core';
 import { signIn } from '../../firebase';
 import { useHistory } from "react-router-dom"
+import { fetchCurrentUser } from '../../firebase';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,9 +14,12 @@ const Login = () => {
   const handleLogin = async () => {
     console.log('email:', email);
     console.log('password:', password);
-    const user = await signIn(email, password);
+    await signIn(email, password);
+    const user = await fetchCurrentUser();
     if (user) {
       history.push('/home');
+    } else {
+      window.alert('Wrong email/password. Please try again');
     }
   }
 
