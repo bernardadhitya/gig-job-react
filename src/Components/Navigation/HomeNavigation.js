@@ -9,7 +9,7 @@ import BusinessJobsPage from '../../Containers/BusinessJobsPage/BusinessJobsPage
 const BusinessOwnerNavigation = ({match}) => {
   return (
     <Switch>
-      <PrivateRoute path={`${match.url}/pekerjaan`} component={BusinessJobsPage}/>
+      <PrivateRoute path={match.url} component={BusinessJobsPage}/>
     </Switch>
   )
 }

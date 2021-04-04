@@ -18,7 +18,7 @@ const Login = () => {
     const user = await fetchCurrentUser();
     console.log(user);
     if (user) {
-      history.push('/business/pekerjaan');
+      history.push('/business');
     } else {
       window.alert('Wrong email/password. Please try again');
     }
