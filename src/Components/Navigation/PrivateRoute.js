@@ -13,12 +13,14 @@ const renderAuthorizedComponent = (AuthorizedComponent, props) => {
   return (
     <div className='component-wrapper'>
       <Navbar/>
+      <div style={{marginTop: 100}}></div>
       <AuthorizedComponent {...props}/>
     </div>
   );
 };
 
 const PrivateRoute = ({component: AuthorizedComponent, ...parentProps}) => {
+  console.log('private router triggered with component:', AuthorizedComponent);
   return (
     <Route
       {...parentProps}
