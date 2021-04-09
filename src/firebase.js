@@ -34,3 +34,13 @@ export const getUserByEmail = async (email) => {
   });
   return data;
 }
+
+export const getAllJobs = async () => {
+  const response = await db.collection('jobs').get();
+  const data = response.docs.map(doc => {
+    const responseId = doc.id;
+    const responseData = doc.data();
+    return { job_id: responseId, ...responseData }
+  });
+  return data;
+}

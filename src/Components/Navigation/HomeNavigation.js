@@ -32,6 +32,4 @@ const HomeNavigation = () => {
   );
 };
 
-//<PrivateRoute path='/home' component={Home}/>
-
 export default HomeNavigation;
