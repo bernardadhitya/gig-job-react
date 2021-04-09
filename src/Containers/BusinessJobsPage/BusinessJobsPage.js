@@ -1,9 +1,13 @@
 import { Grid } from '@material-ui/core';
 import React, {useState, useEffect} from 'react';
+import { useHistory } from 'react-router';
+import { formattedCurrency, formattedDescription } from '../../Constants/format';
 import { getAllJobs } from '../../firebase';
 import './BusinessJobsPage.css';
 
 const BusinessJobsPage = () => {
+  const history = useHistory();
+
   const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
@@ -14,23 +18,18 @@ const BusinessJobsPage = () => {
     fetchData();
   }, []);
 
-  const numericToCurrency = new Intl.NumberFormat('id-ID', {
-    style: 'currency',
-    currency: 'IDR',
-  });
-
-  const formattedDescription = (description) => {
-    return description.length > 100 ? description.slice(0,97) + '...' : description;
+  const handleClickJob = (job_id) => {
+    history.push(`/business/${job_id}`);
   }
 
   const renderJobCard = (job) => {
-    const { description, fee, title, provider, location } = job;
+    const { job_id, description, fee, title, provider, location } = job;
     const { name: providerName } = provider;
     return (
       <Grid item xs={3}>
-        <div className='job-card'>
+        <div className='job-card' onClick={() => handleClickJob(job_id)}>
           <h4>{title}</h4>
-          <h3>{numericToCurrency.format(fee)}</h3>
+          <h3>{formattedCurrency(fee)}</h3>
           <p>{formattedDescription(description)}</p>
           <h5>{providerName}</h5>
           <p>{location}</p>
@@ -50,7 +49,7 @@ const BusinessJobsPage = () => {
   }
 
   return (
-    <div>
+    <div style={{margin: '20px 40px'}}>
       {renderJobCards()}
     </div>
   )

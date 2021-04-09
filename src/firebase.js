@@ -44,3 +44,11 @@ export const getAllJobs = async () => {
   });
   return data;
 }
+
+export const getJobById = async (jobId) => {
+  const response = await db.collection('jobs').doc(jobId).get();
+  const responseId = response.id;
+  const responseData = response.data();
+  return { job_id: responseId, ...responseData };
+}
+
