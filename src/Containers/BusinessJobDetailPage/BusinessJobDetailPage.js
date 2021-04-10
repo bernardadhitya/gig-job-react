@@ -22,7 +22,7 @@ const BusinessJobDetailPage = () => {
   const renderRequestForm = () => {
     return job ? (
       <div className='request-form-card'>
-        <Grid container>
+        <Grid container spacing={1}>
           <Grid item xs={12} className='form-item'>
             <h3>{`${formattedCurrency(job.fee)} per jam`}</h3>
           </Grid>
@@ -123,6 +123,11 @@ const BusinessJobDetailPage = () => {
               multiline
               rows={4}
             />
+          </Grid>
+          <Grid item xs={12}>
+            <div className='form-submit-button'>
+              <h3>Kirim Permintaan</h3>
+            </div>
           </Grid>
         </Grid>
       </div>

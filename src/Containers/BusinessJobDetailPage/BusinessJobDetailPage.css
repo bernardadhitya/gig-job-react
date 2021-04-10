@@ -12,5 +12,18 @@
 }
 
 .request-form-card .form-item {
-  margin: 10px 0;
+  margin: 10px 0 0 0;
+}
+
+.form-submit-button {
+  background-color: #1A3E60;
+  cursor: pointer;
+  padding: 2px;
+  text-align: center;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.form-submit-button h3 {
+  color: #FFFFFF;
 }
