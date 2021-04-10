@@ -52,3 +52,9 @@ export const getJobById = async (jobId) => {
   return { job_id: responseId, ...responseData };
 }
 
+export const createRequestPost = async (requestData) => {
+  await db.collection('requests').add({
+    ...requestData
+  });
+}
+
