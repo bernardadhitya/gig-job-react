@@ -22,7 +22,7 @@ export const signIn = async (email, password) => {
 export const fetchCurrentUser = async () => {
   const isLoggedIn = fireAuth.currentUser;
   const userData = isLoggedIn ? await getUserByEmail(isLoggedIn.email) : null;
-  return userData;
+  return isLoggedIn ? userData[0] : userData;
 }
 
 export const getUserByEmail = async (email) => {
@@ -30,7 +30,7 @@ export const getUserByEmail = async (email) => {
   const data = response.docs.map(doc => {
       const responseId = doc.id;
       const responseData = doc.data();
-      return { userId: responseId, ...responseData }
+      return { user_id: responseId, ...responseData }
   });
   return data;
 }
@@ -58,8 +58,11 @@ export const createRequestPost = async (requestData) => {
   });
 }
 
-export const getRequestsByStatus = async (status) => {
-  const response = await db.collection('requests').where('status', '==', status).get();
+export const getRequestsByStatus = async (user_id, status) => {
+  const response = await db.collection('requests')
+    .where('status', '==', status)
+    .where('requester.id', '==', user_id)
+    .get();
   const data = response.docs.map(doc => {
     const responseId = doc.id;
     const responseData = doc.data();

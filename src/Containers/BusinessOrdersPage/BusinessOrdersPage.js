@@ -1,6 +1,6 @@
 import { Grid } from '@material-ui/core';
 import React, {useState, useEffect} from 'react';
-import { getRequestsByStatus } from '../../firebase';
+import { fetchCurrentUser, getRequestsByStatus } from '../../firebase';
 import { STATUS } from '../../Constants/status';
 import OrderCard from '../../Components/OrderCard/OrderCard';
 
@@ -9,7 +9,10 @@ const BusinessOrdersPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedRequests = await getRequestsByStatus(STATUS[0]);
+      const currentUser = await fetchCurrentUser();
+      const { user_id } = currentUser;
+
+      const fetchedRequests = await getRequestsByStatus(user_id, STATUS[0]);
       setRequests(fetchedRequests);
       console.log(fetchedRequests);
     }
