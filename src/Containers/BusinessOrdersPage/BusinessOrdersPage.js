@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import { fetchCurrentUser, getRequestsByStatus } from '../../firebase';
 import { STATUS } from '../../Constants/status';
 import OrderCard from '../../Components/OrderCard/OrderCard';
+import FilterSection from '../../Components/FilterSection/FilterSection';
 
 const BusinessOrdersPage = () => {
   const [requests, setRequests] = useState([]);
@@ -10,6 +11,7 @@ const BusinessOrdersPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const currentUser = await fetchCurrentUser();
+      if (!currentUser) return;
       const { user_id } = currentUser;
 
       const fetchedRequests = await getRequestsByStatus(user_id, STATUS[0]);
@@ -23,20 +25,13 @@ const BusinessOrdersPage = () => {
     return requests.map(request => <OrderCard request={request}/>);
   }
 
-  const renderFilterSection = () => {
-    return (
-      <>
-      </>
-    )
-  }
-
   return (
     <Grid container spacing={3}>
       <Grid item xs={8}>
         {renderRequestCards()}
       </Grid>
       <Grid item xs={4}>
-        {renderFilterSection()}
+        <FilterSection />
       </Grid>
     </Grid>
   )
