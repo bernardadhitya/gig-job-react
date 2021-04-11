@@ -15,12 +15,12 @@ const BusinessOrdersPage = () => {
       if (!currentUser) return;
       const { user_id } = currentUser;
 
-      const fetchedRequests = await getRequestsByStatus(user_id, STATUS[0]);
+      const fetchedRequests = await getRequestsByStatus(user_id, selectedStatus);
       setRequests(fetchedRequests);
       console.log(fetchedRequests);
     }
     fetchData();
-  }, []);
+  }, [selectedStatus]);
 
   const renderRequestCards = () => {
     return requests.map(request => <OrderCard request={request}/>);
