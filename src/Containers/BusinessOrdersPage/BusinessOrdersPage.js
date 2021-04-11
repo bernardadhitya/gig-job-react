@@ -7,6 +7,7 @@ import FilterSection from '../../Components/FilterSection/FilterSection';
 
 const BusinessOrdersPage = () => {
   const [requests, setRequests] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +32,7 @@ const BusinessOrdersPage = () => {
         {renderRequestCards()}
       </Grid>
       <Grid item xs={4}>
-        <FilterSection />
+        <FilterSection selectedStatus={selectedStatus} setSelectedStatus={setSelectedStatus}/>
       </Grid>
     </Grid>
   )
