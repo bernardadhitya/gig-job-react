@@ -59,7 +59,7 @@ export const createRequestPost = async (requestData) => {
 }
 
 export const getRequestsByStatus = async (status) => {
-  const response = await db.collection('jobs').where('status', '==', status).get();
+  const response = await db.collection('requests').where('status', '==', status).get();
   const data = response.docs.map(doc => {
     const responseId = doc.id;
     const responseData = doc.data();
