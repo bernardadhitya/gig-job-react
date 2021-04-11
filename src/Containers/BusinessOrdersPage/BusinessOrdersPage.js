@@ -1,13 +1,12 @@
 import { Grid } from '@material-ui/core';
 import React, {useState, useEffect} from 'react';
 import { fetchCurrentUser, getRequestsByStatus } from '../../firebase';
-import { STATUS } from '../../Constants/status';
 import OrderCard from '../../Components/OrderCard/OrderCard';
 import FilterSection from '../../Components/FilterSection/FilterSection';
 
 const BusinessOrdersPage = () => {
   const [requests, setRequests] = useState([]);
-  const [selectedStatus, setSelectedStatus] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('ALL');
 
   useEffect(() => {
     const fetchData = async () => {

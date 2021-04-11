@@ -1,4 +1,5 @@
 export const STATUS = [
+  'ALL',
   'WAITING-CONFIRMATION',
   'WAITING-PAYMENT',
   'WAITING-PROGRESS',

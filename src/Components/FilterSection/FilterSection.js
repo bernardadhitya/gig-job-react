@@ -7,6 +7,7 @@ const FilterSection = (props) => {
 
   const renderFilterButton = (status) => {
     const statusList = {
+      'ALL': 'Semua',
       'WAITING-CONFIRMATION': 'Menunggu Konfirmasi',
       'WAITING-PAYMENT': 'Menunggu Pembayaran',
       'WAITING-PROGRESS': 'Menunggu Pengerjaan',

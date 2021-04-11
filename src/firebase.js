@@ -59,10 +59,14 @@ export const createRequestPost = async (requestData) => {
 }
 
 export const getRequestsByStatus = async (user_id, status) => {
-  const response = await db.collection('requests')
-    .where('status', '==', status)
-    .where('requester.id', '==', user_id)
-    .get();
+  const response = status === 'ALL' ?
+    await db.collection('requests')
+      .where('requester.id', '==', user_id)
+      .get() :
+    await db.collection('requests')
+      .where('status', '==', status)
+      .where('requester.id', '==', user_id)
+      .get();
   const data = response.docs.map(doc => {
     const responseId = doc.id;
     const responseData = doc.data();
