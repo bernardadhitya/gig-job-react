@@ -1,8 +1,61 @@
 .order-card {
   margin: 30px;
   border-radius: 10px;
-  padding: 10px 20px;
+  padding: 0 0 10px 20px;
   box-shadow: 0px 2px 9px 4px rgba(216,216,216,0.5);
   -webkit-box-shadow: 0px 2px 9px 4px rgba(216,216,216,0.5);
   -moz-box-shadow: 0px 2px 9px 4px rgba(216,216,216,0.5);
+}
+
+h3 {
+  color: #3183CD;
+}
+
+.status-grid {
+  color: white;
+  background-color: aquamarine;
+  border-top-right-radius: 10px;
+  text-align: center;
+}
+
+.waiting-confirmation-status-grid {
+  color: white;
+  background-color: #C0C0C0;
+  border-top-right-radius: 10px;
+  text-align: center;
+}
+
+.waiting-payment-status-grid {
+  color: white;
+  background-color: #E5C87B;
+  border-top-right-radius: 10px;
+  text-align: center;
+}
+
+.waiting-progress-status-grid {
+  color: white;
+  background-color: #E5C87B;
+  border-top-right-radius: 10px;
+  text-align: center;
+}
+
+.in-progress-status-grid {
+  color: white;
+  background-color: #E5C87B;
+  border-top-right-radius: 10px;
+  text-align: center;
+}
+
+.done-status-grid {
+  color: white;
+  background-color: #4FC63B;
+  border-top-right-radius: 10px;
+  text-align: center;
+}
+
+.rejected-status-grid {
+  color: white;
+  background-color: #FF4133;
+  border-top-right-radius: 10px;
+  text-align: center;
 }
