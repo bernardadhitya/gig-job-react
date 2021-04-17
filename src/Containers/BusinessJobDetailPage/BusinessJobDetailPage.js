@@ -5,6 +5,7 @@ import { createRequestPost, getJobById } from '../../firebase';
 import './BusinessJobDetailPage.css';
 import MuiAlert from '@material-ui/lab/Alert';
 import RequestForm from '../../Components/RequestForm/RequestForm';
+import JobPosterProfileCard from '../../Components/JobPosterProfileCard/JobPosterProfileCard';
 
 const BusinessJobDetailPage = () => {
   const { id } = useParams();
@@ -77,6 +78,7 @@ const BusinessJobDetailPage = () => {
           <h1>{job ? job.title : ''}</h1>
           <h4>Deskripsi Jasa</h4>
           <p>{job ? job.description : ''}</p>
+          <JobPosterProfileCard/>
         </Grid>
         <Grid item xs={1}></Grid>
         <Grid item xs={4}>
