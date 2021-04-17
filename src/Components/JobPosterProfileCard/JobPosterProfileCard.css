@@ -16,6 +16,7 @@
   text-align: center;
   color: white;
   background-color: #1A3E60;
+  cursor: pointer;
 }
 
 .chat-button {
@@ -23,4 +24,5 @@
   text-align: center;
   color: white;
   background-color: #3183CD;
+  cursor: pointer;
 }

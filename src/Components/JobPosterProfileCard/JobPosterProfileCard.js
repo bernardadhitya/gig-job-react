@@ -1,14 +1,28 @@
 import { Grid } from '@material-ui/core';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './JobPosterProfileCard.css';
+import { getUserById } from '../../firebase';
+import {ReactComponent as IconVerified} from '../../Assets/icons/icon-verified.svg';
 
-const JobPosterProfileCard = () => {
+const JobPosterProfileCard = (props) => {
+  const { jobPosterId } = props;
+
+  const [jobPoster, setJobPoster] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!jobPosterId) return;
+      const fetchedJobPoster = await getUserById(jobPosterId);
+      setJobPoster(fetchedJobPoster);
+    }
+    fetchData();
+  }, [jobPosterId]);
   
-  return (
+  return jobPoster ? (
     <div className='job-poster-profile-card-wrapper'>
       <Grid container className='content-wrapper'>
         <Grid item xs={12}>
-          <h2>Nama</h2>
+          <h2>{jobPoster.name}</h2>
         </Grid>
         <Grid item xs={12}>
           <h4>Tentang Pekerja</h4>
@@ -27,7 +41,7 @@ const JobPosterProfileCard = () => {
         </Grid>
       </Grid>
     </div>
-  )
+  ): <></>
 }
 
 export default JobPosterProfileCard;
