@@ -59,6 +59,17 @@ export const getJobById = async (jobId) => {
   return { job_id: responseId, ...responseData };
 }
 
+export const getProfileByUserId = async (userId) => {
+  const response = await db.collection('profiles').where("user_id", "==", userId).get();
+  const data = response.docs.map(doc => {
+      const responseId = doc.id;
+      const responseData = doc.data();
+      return { user_id: responseId, ...responseData }
+  });
+  console.log(data);
+  return data[0];
+}
+
 export const createRequestPost = async (requestData) => {
   const currentUser = await fetchCurrentUser();
   await db.collection('requests').add({
