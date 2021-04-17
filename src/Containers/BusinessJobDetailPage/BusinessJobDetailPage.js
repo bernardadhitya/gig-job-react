@@ -1,10 +1,10 @@
-import { Grid, Snackbar, TextField } from '@material-ui/core';
+import { Grid, Snackbar } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { formattedCurrency } from '../../Constants/format';
 import { createRequestPost, getJobById } from '../../firebase';
 import './BusinessJobDetailPage.css';
 import MuiAlert from '@material-ui/lab/Alert';
+import RequestForm from '../../Components/RequestForm/RequestForm';
 
 const BusinessJobDetailPage = () => {
   const { id } = useParams();
@@ -37,140 +37,33 @@ const BusinessJobDetailPage = () => {
       city,
       zipCode,
       address,
-      note
+      note,
     }
-    console.log(submissionData);
     await createRequestPost(submissionData);
     setOpenSnackbar(true);
   }
 
   const renderRequestForm = () => {
-    return job ? (
-      <div className='request-form-card'>
-        <Grid container spacing={1}>
-          <Grid item xs={12} className='form-item'>
-            <h3>{`${formattedCurrency(job.fee)} per jam`}</h3>
-          </Grid>
-          <Grid item xs={12} className='form-item'>
-            <TextField
-              id="date"
-              label="Tanggal"
-              type="date"
-              defaultValue={selectedDate.toString()}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="outlined"
-              fullWidth="true"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
-          </Grid>  
-          <Grid item xs={12}>
-            <p>Jam</p>
-          </Grid>
-          <Grid item xs={12} className='form-item'>
-            <TextField
-              id="startTime"
-              label="Dari"
-              type="time"
-              defaultValue="07:30"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                step: 300
-              }}
-              variant="outlined"
-              fullWidth="true"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} className='form-item'>
-            <TextField
-              id="endTime"
-              label="Hingga"
-              type="time"
-              defaultValue="07:30"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                step: 300,
-              }}
-              variant="outlined"
-              fullWidth="true"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <p>Alamat</p>
-          </Grid>
-          <Grid item xs={6} className='form-item'>
-            <TextField
-              id="city"
-              label="Kota"
-              type="text"
-              defaultValue=""
-              variant="outlined"
-              fullWidth="true"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={6} className='form-item'>
-            <TextField
-              id="zipCode"
-              label="Kode Pos"
-              type="text"
-              defaultValue=""
-              variant="outlined"
-              fullWidth="true"
-              value={zipCode}
-              onChange={(e) => setZipCode(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12} className='form-item'>
-            <TextField
-              id="address"
-              label="Alamat"
-              type="text"
-              defaultValue=""
-              variant="outlined"
-              fullWidth="true"
-              multiline
-              rows={4}
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <p>Note</p>
-          </Grid>
-          <Grid item xs={12} className='form-item'>
-            <TextField
-              id="note"
-              label="Catatan"
-              type="text"
-              defaultValue=""
-              variant="outlined"
-              fullWidth="true"
-              multiline
-              rows={4}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <div className='form-submit-button' onClick={() => handleSubmitButtonClicked()}>
-              <h3>Kirim Permintaan</h3>
-            </div>
-          </Grid>
-        </Grid>
-      </div>
-    ) : <></>
+    return job ?
+      <RequestForm
+        setSelectedDate={setSelectedDate}
+        setStartTime={setStartTime}
+        setEndTime={setEndTime}
+        setCity={setCity}
+        setZipCode={setZipCode}
+        setAddress={setAddress}
+        setNote={setNote}
+        handleSubmitButtonClicked={handleSubmitButtonClicked}
+        job={job}
+        selectedDate={selectedDate}
+        startTime={startTime}   
+        endTime={endTime}    
+        city={city}        
+        zipCode={zipCode}     
+        address={address}     
+        note={note}
+      />
+      : <></>
   }
 
   const Alert = (props) => {
@@ -182,6 +75,7 @@ const BusinessJobDetailPage = () => {
       <Grid container>
         <Grid item xs={7}>
           <h1>{job ? job.title : ''}</h1>
+          <h4>Deskripsi Jasa</h4>
           <p>{job ? job.description : ''}</p>
         </Grid>
         <Grid item xs={1}></Grid>

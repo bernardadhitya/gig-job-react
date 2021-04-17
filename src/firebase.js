@@ -53,8 +53,14 @@ export const getJobById = async (jobId) => {
 }
 
 export const createRequestPost = async (requestData) => {
+  const currentUser = await fetchCurrentUser();
   await db.collection('requests').add({
-    ...requestData
+    ...requestData,
+    requester: {
+      id: currentUser.user_id,
+      name: currentUser.name
+    },
+    status: 'WAITING-CONFIRMATION'
   });
 }
 
