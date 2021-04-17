@@ -73,17 +73,19 @@ const BusinessJobDetailPage = () => {
 
   return (
     <div style={{margin: '20px 40px'}}>
-      <Grid container>
-        <Grid item xs={7}>
+      <Grid container spacing={3}>
+      <Grid item xs={1}></Grid>
+        <Grid item xs={6}>
           <h1>{job ? job.title : ''}</h1>
           <h4>Deskripsi Jasa</h4>
           <p>{job ? job.description : ''}</p>
           <JobPosterProfileCard jobPosterId={job ? job.provider.id : null}/>
         </Grid>
-        <Grid item xs={1}></Grid>
+        
         <Grid item xs={4}>
           {renderRequestForm()}
         </Grid>
+        <Grid item xs={1}></Grid>
       </Grid>
       <Snackbar
         anchorOrigin={{
