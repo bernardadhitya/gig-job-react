@@ -78,7 +78,7 @@ const BusinessJobDetailPage = () => {
           <h1>{job ? job.title : ''}</h1>
           <h4>Deskripsi Jasa</h4>
           <p>{job ? job.description : ''}</p>
-          <JobPosterProfileCard/>
+          <JobPosterProfileCard jobPosterId={job ? job.provider.id : null}/>
         </Grid>
         <Grid item xs={1}></Grid>
         <Grid item xs={4}>
