@@ -2,9 +2,11 @@ import { Grid } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import './JobPosterProfileCard.css';
 import { getUserById } from '../../firebase';
-import {ReactComponent as IconVerified} from '../../Assets/icons/icon-verified.svg';
+import { useHistory } from 'react-router';
 
 const JobPosterProfileCard = (props) => {
+  const history = useHistory();
+
   const { jobPosterId } = props;
 
   const [jobPoster, setJobPoster] = useState(null);
@@ -17,6 +19,10 @@ const JobPosterProfileCard = (props) => {
     }
     fetchData();
   }, [jobPosterId]);
+
+  const handleShowJobPosterProfile = () => {
+    history.push(`/business/profil/${jobPosterId}`);
+  }
   
   return jobPoster ? (
     <div className='job-poster-profile-card-wrapper'>
@@ -33,7 +39,7 @@ const JobPosterProfileCard = (props) => {
         </Grid>
       </Grid>
       <Grid container>
-        <Grid item xs={6} className='details-button'>
+        <Grid item xs={6} className='details-button' onClick={() => handleShowJobPosterProfile()}>
           <h4>Lihar Detail Pekerja</h4>
         </Grid>
         <Grid item xs={6} className='chat-button'>
