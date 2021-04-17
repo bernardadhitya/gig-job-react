@@ -1,9 +1,10 @@
+import { Grid } from '@material-ui/core';
 import React, {useState} from 'react';
 import { STATUS } from '../../Constants/status';
 import './FilterSection.css';
 
 const FilterSection = (props) => {
-  const { selectedStatus, setSelectedStatus } = props
+  const { selectedStatus, setSelectedStatus, numberOfRequests } = props
 
   const renderFilterButton = (status) => {
     const statusList = {
@@ -18,7 +19,16 @@ const FilterSection = (props) => {
 
     return status === selectedStatus ? (
       <div className='button-selected' onClick={() => setSelectedStatus(status)}>
-        <h5>{statusList[status]}</h5>
+        <Grid container>
+          <Grid item xs={11}>
+            <h5>{statusList[status]}</h5>
+          </Grid>
+          <Grid item xs={1}>
+            <div className='request-number-wrapper'>
+              <h5>{numberOfRequests}</h5>
+            </div>
+          </Grid>
+        </Grid>
       </div>
     ) : (
       <div className='button' onClick={() => setSelectedStatus(status)}>
