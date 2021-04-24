@@ -56,8 +56,6 @@ export const getJobsByUserId = async (userId) => {
 }
 
 export const getJobsByUserIdAndStatus = async (userId, status) => {
-  // console.log(userId);
-  // console.log(status);
   const response = await db.collection('jobs')
     .where('status', '==', status)
     .where('provider.id', '==', userId)

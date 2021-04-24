@@ -16,7 +16,6 @@ const BusinessOrdersPage = () => {
 
       const fetchedRequests = await getRequestsByStatus(user_id, selectedStatus);
       setRequests(fetchedRequests);
-      console.log(fetchedRequests);
     }
     fetchData();
   }, [selectedStatus]);

@@ -15,7 +15,6 @@ const ServiceJobsPage = () => {
       const fetchedCurrentUser = await fetchCurrentUser();
       setJobs(fetchedJobs);
       setCurrentUser(fetchedCurrentUser)
-      console.log(fetchedJobs);
     }
     fetchData();
   }, [selectedStatus]);

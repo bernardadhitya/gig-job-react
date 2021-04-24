@@ -15,7 +15,6 @@ const JobPosterProfileCard = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       if (!jobPosterId) return;
-      console.log(jobPosterId);
       const fetchedJobPoster = await getProfileByUserId(jobPosterId);
       setJobPoster(fetchedJobPoster);
     }

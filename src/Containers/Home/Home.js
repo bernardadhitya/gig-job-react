@@ -10,8 +10,6 @@ const Home = () => {
   const [user, setUser] = useState(undefined);
   const [playlists, setPlaylists] = useState([]);
 
-  console.log(user);
-
   useEffect(() => {
     (async () => {
       try {

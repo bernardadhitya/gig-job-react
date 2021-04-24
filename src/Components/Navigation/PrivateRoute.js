@@ -20,7 +20,6 @@ const renderAuthorizedComponent = (AuthorizedComponent, props) => {
 };
 
 const PrivateRoute = ({component: AuthorizedComponent, ...parentProps}) => {
-  console.log('private router triggered with component:', AuthorizedComponent);
   return (
     <Route
       {...parentProps}
