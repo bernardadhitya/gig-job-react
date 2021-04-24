@@ -6,20 +6,7 @@ import { getJobById } from '../../firebase';
 import './OrderCard.css';
 
 const OrderCard = (props) => {
-  const {
-    request: {
-      request_id,
-      address,
-      city,
-      date,
-      endTime, 
-      job_id,
-      note,
-      startTime,
-      status,
-      zipCode
-    }
-  } = props;
+  const { request: { job_id, status }} = props;
 
   const [job, setJob] = useState(null);
 

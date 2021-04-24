@@ -45,6 +45,23 @@ export const getAllJobs = async () => {
   return data;
 }
 
+export const getJobsByUserId = async (userId) => {
+  const response = await db.collection('jobs').where('provider.id', '==', userId).get();
+  const data = response.docs.map(doc => {
+    const responseId = doc.id;
+    const responseData = doc.data();
+    return { job_id: responseId, ...responseData }
+  });
+  return data;
+}
+
+export const getJobsByCurrentUserId = async () => {
+  const fetchedCurrentUser = await fetchCurrentUser();
+  if (!fetchedCurrentUser) return [];
+  const fetchedJobsByCurrentUser = await getJobsByUserId(fetchedCurrentUser.user_id);
+  return fetchedJobsByCurrentUser;
+}
+
 export const getUserById = async (userId) => {
   const response = await db.collection('users').doc(userId).get();
   const responseId = response.id;
