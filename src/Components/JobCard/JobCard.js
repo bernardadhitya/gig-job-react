@@ -1,14 +1,31 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
 import { formattedCurrency, formattedDescription } from '../../Constants/format';
-import { TRANSLATED_STATUS } from '../../Constants/status';
 import './JobCard.css';
 
 const JobCard = (props) => {
-  const { job: {fee, description, provider, location, title} } = props;
+  const { job: {fee, description, provider, location, title, status} } = props;
+
+  const renderJobOption = () => {
+    return status === 'ACTIVE-JOB' ? (
+      <div className='job-card-option-active'>
+        <h4>Pekerjaan Aktif</h4>
+        <h6>Detail</h6>
+        <h6>Ubah</h6>
+        <h6 style={{color: 'red'}}>Non-Aktifkan</h6>
+      </div>
+    ) : (
+      <div className='job-card-option-inactive'>
+        <h4>Pekerjaan Non-Aktif</h4>
+        <h6>Detail</h6>
+        <h6>Ubah</h6>
+        <h6>Aktifkan</h6>
+      </div>
+    )
+  }
 
   return (
-    <div className='job-card'>
+    <div className='job-card-service'>
       <Grid container>
         <Grid item xs={3}>
 
@@ -25,12 +42,7 @@ const JobCard = (props) => {
           <p>{location}</p>
         </Grid>
         <Grid item xs={3}>
-          <div className='job-card-option'>
-            <h4>Pekerjaan Aktif</h4>
-            <h6>Detail</h6>
-            <h6>Ubah</h6>
-            <h6>Non-Aktifkan</h6>
-          </div>
+          {renderJobOption()}
         </Grid>
       </Grid>
     </div>

@@ -36,7 +36,7 @@ export const getUserByEmail = async (email) => {
 }
 
 export const getAllJobs = async () => {
-  const response = await db.collection('jobs').get();
+  const response = await db.collection('jobs').where('status', '==', 'ACTIVE-JOB').get();
   const data = response.docs.map(doc => {
     const responseId = doc.id;
     const responseData = doc.data();
@@ -55,10 +55,34 @@ export const getJobsByUserId = async (userId) => {
   return data;
 }
 
+export const getJobsByUserIdAndStatus = async (userId, status) => {
+  // console.log(userId);
+  // console.log(status);
+  const response = await db.collection('jobs')
+    .where('status', '==', status)
+    .where('provider.id', '==', userId)
+    .get();
+  const data = response.docs.map(doc => {
+    const responseId = doc.id;
+    const responseData = doc.data();
+    return { job_id: responseId, ...responseData }
+  });
+  return data;
+}
+
 export const getJobsByCurrentUserId = async () => {
   const fetchedCurrentUser = await fetchCurrentUser();
   if (!fetchedCurrentUser) return [];
   const fetchedJobsByCurrentUser = await getJobsByUserId(fetchedCurrentUser.user_id);
+  return fetchedJobsByCurrentUser;
+}
+
+export const getJobsByCurrentUserIdAndStatus = async (status) => {
+  const fetchedCurrentUser = await fetchCurrentUser();
+  if (!fetchedCurrentUser) return [];
+  const fetchedJobsByCurrentUser = status === 'ALL' ?
+    await getJobsByUserId(fetchedCurrentUser.user_id) :
+    await getJobsByUserIdAndStatus(fetchedCurrentUser.user_id, status);
   return fetchedJobsByCurrentUser;
 }
 

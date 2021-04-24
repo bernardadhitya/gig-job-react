@@ -1,4 +1,4 @@
-.job-card {
+.job-card-service {
   margin: 30px;
   border-radius: 10px;
   padding: 0 0 10px 20px;
@@ -11,9 +11,17 @@ h3 {
   color: #3183CD;
 }
 
-.job-card-option {
+.job-card-option-active {
   background-color: #1A3D5E;
   color: white;
+  height: 96%;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 10px;
+}
+
+.job-card-option-inactive {
+  background-color: #cdcdcd;
   height: 96%;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
