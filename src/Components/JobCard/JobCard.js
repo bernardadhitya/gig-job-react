@@ -4,7 +4,18 @@ import { formattedCurrency, formattedDescription } from '../../Constants/format'
 import './JobCard.css';
 
 const JobCard = (props) => {
-  const { job: {fee, description, provider, location, title, status} } = props;
+  const {
+    job: {
+      job_id,
+      fee,
+      description,
+      provider,
+      location,
+      title,
+      status
+    },
+    handleJobStatus
+  } = props;
 
   const renderJobOption = () => {
     return status === 'ACTIVE-JOB' ? (
@@ -12,14 +23,24 @@ const JobCard = (props) => {
         <h4>Pekerjaan Aktif</h4>
         <h6>Detail</h6>
         <h6>Ubah</h6>
-        <h6 style={{color: 'red'}}>Non-Aktifkan</h6>
+        <div
+          style={{cursor: 'pointer'}}
+          onClick={() => handleJobStatus(job_id, 'INACTIVE-JOB')}
+        >
+          <h6 style={{color: 'red'}}>Non-Aktifkan</h6>
+        </div>
       </div>
     ) : (
       <div className='job-card-option-inactive'>
         <h4>Pekerjaan Non-Aktif</h4>
         <h6>Detail</h6>
         <h6>Ubah</h6>
-        <h6>Aktifkan</h6>
+        <div
+          style={{cursor: 'pointer'}}
+          onClick={() => handleJobStatus(job_id, 'ACTIVE-JOB')}
+        >
+          <h6 style={{color: 'green'}}>Aktifkan</h6>
+        </div>
       </div>
     )
   }

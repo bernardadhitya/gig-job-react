@@ -1,14 +1,18 @@
-import { Grid } from '@material-ui/core';
+import { Grid, Snackbar } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import FilterJobs from '../../Components/FilterSection/FilterJobs';
 import JobCard from '../../Components/JobCard/JobCard';
-import { fetchCurrentUser, getJobsByCurrentUserIdAndStatus } from '../../firebase';
+import MuiAlert from '@material-ui/lab/Alert';
+import { fetchCurrentUser, getJobsByCurrentUserIdAndStatus, updateJobPost } from '../../firebase';
 
 const ServiceJobsPage = () => {
   const [jobs, setJobs] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState('ALL');
+  const [refresh, setRefresh] = useState(0);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarType, setSnackbarType] = useState('success');
 
   const history = useHistory();
 
@@ -20,10 +24,26 @@ const ServiceJobsPage = () => {
       setCurrentUser(fetchedCurrentUser)
     }
     fetchData();
-  }, [selectedStatus]);
+  }, [selectedStatus, refresh]);
+
+  const handleJobStatus = async (jobId, newStatus) => {
+    setSnackbarType(newStatus === 'ACTIVE-JOB' ? 'success' : 'error');
+    await updateJobPost(jobId, newStatus);
+    setRefresh(refresh + 1);
+    setOpenSnackbar(true);
+  }
 
   const renderJobs = () => {
-    return jobs.map(job => <JobCard job={job}/>)
+    return jobs.map(job =>
+      <JobCard
+        job={job}
+        handleJobStatus={handleJobStatus}
+      />
+    )
+  }
+
+  const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
   }
 
   return (
@@ -48,6 +68,22 @@ const ServiceJobsPage = () => {
         </Grid>
         <Grid item xs={1}></Grid>
       </Grid>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+      >
+        <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarType}>
+          {snackbarType === 'success' ? 
+            'Pekerjaan sudah diaktifkan kembali'
+            : 'Pekerjaan sudah dinon-aktifkan'
+          }
+        </Alert>
+      </Snackbar>
     </div>
   )
 }

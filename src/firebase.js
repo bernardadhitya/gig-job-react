@@ -95,6 +95,11 @@ export const getJobsByUserIdAndStatus = async (userId, status) => {
   return data;
 }
 
+export const updateJobPost = async (jobId, data) => {
+  const response = await db.collection('jobs').doc(jobId).update({status: data})
+  return response;
+}
+
 export const getJobsByCurrentUserId = async () => {
   const fetchedCurrentUser = await fetchCurrentUser();
   if (!fetchedCurrentUser) return [];
