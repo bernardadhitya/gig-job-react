@@ -35,6 +35,33 @@ export const getUserByEmail = async (email) => {
   return data;
 }
 
+export const uploadImage = async (file, job) => {
+  storage.child(`/${job.id}/${file.name}`).put(file);
+}
+
+export const createJobPost = async (jobData, image) => {
+  const currentUser = await fetchCurrentUser();
+  const job = await db.collection('jobs').add({
+    ...jobData,
+    provider: {
+      id: currentUser.user_id,
+      name: currentUser.name
+    },
+    status: 'ACTIVE-JOB'
+  });
+  console.log(job);
+  await uploadImage(image, job);
+}
+
+export const getImageUrlByImageRef = async (imageRef) => {
+  const response = await imageRef.getDownloadURL().then((url) => {
+    return url;
+  }).catch(function (error) {
+    console.log(error)
+  });
+  return response;
+}
+
 export const getAllJobs = async () => {
   const response = await db.collection('jobs').where('status', '==', 'ACTIVE-JOB').get();
   const data = response.docs.map(doc => {

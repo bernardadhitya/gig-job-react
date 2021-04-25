@@ -7,6 +7,7 @@ import BusinessOrdersPage from '../../Containers/BusinessOrdersPage/BusinessOrde
 import BusinessJobDetailPage from '../../Containers/BusinessJobDetailPage/BusinessJobDetailPage';
 import BusinessJobPosterProfilePage from '../../Containers/BusinessJobPosterProfilePage/BusinessJobPosterProfilePage';
 import ServiceJobsPage from '../../Containers/ServiceJobsPage/ServiceJobsPage';
+import ServiceCreateJobPage from '../../Containers/ServiceCreateJobPage/ServiceCreateJobPage';
 
 const DummyPage = () => {
   return (
@@ -32,6 +33,7 @@ const ServiceProviderNavigation = ({match}) => {
   return (
     <Switch>
       <PrivateRoute exact path={match.url} component={ServiceJobsPage}/>
+      <PrivateRoute path={`${match.url}/pekerjaan`} component={ServiceCreateJobPage}/>
       <PrivateRoute path={`${match.url}/pesanan`} component={DummyPage}/>
       <PrivateRoute path={`${match.url}/chat`} component={DummyPage}/>
       <PrivateRoute exact path={`${match.url}/profil/:id`} component={BusinessJobPosterProfilePage}/>
