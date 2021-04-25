@@ -77,7 +77,6 @@ const Navbar = () => {
     } else {
       history.push(serviceRoutes[nav]);
     }
-    
   }
 
   const handleRedirectProfile = (option) => {

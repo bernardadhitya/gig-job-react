@@ -9,6 +9,7 @@ import {
   TextField
 } from '@material-ui/core';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
 import { createJobPost } from '../../firebase';
 import './ServiceCreateJobPage.css';
 
@@ -21,6 +22,8 @@ const ServiceCreateJobPage = () => {
   const [fee, setFee] = useState(0);
   const [location, setLocation] = useState('')
   const [image, setImage] = useState('');
+
+  const history = useHistory();
 
   const handleImageAsFile = (e) => {
     setImage(e.target.files[0]);
@@ -37,6 +40,7 @@ const ServiceCreateJobPage = () => {
       location
     }
     await createJobPost(jobData, image);
+    history.push('/service');
   }
 
   console.log(image);
