@@ -48,8 +48,8 @@ const HomeNavigation = () => {
     <Switch>
       <Route exact path='/'><Redirect to='/login'/></Route>
       <Route path='/login' component={Login}/>
-      <Route path='/business' component={BusinessOwnerNavigation} />
-      <Route path='/service' component={ServiceProviderNavigation} />
+      <Route path='/business' component={BusinessOwnerNavigation}/>
+      <Route path='/service' component={ServiceProviderNavigation}/>
     </Switch>
   );
 };

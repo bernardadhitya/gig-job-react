@@ -59,13 +59,25 @@ const Navbar = () => {
   const currentRole = location.pathname.split('/')[1];
   
   const handleClick = (nav) => {
-    const routes = {
+    const businessRoutes = {
       home: '/business',
       orders: '/business/pesanan',
       chat: '/business/chat',
       profile: '/business/profil'
     }
-    history.push(routes[nav]);
+    const serviceRoutes = {
+      home: '/service',
+      orders: '/service/pesanan',
+      chat: '/service/chat',
+      profile: '/service/profil'
+    }
+
+    if (currentRole === 'business'){
+      history.push(businessRoutes[nav]);
+    } else {
+      history.push(serviceRoutes[nav]);
+    }
+    
   }
 
   const handleRedirectProfile = (option) => {
@@ -76,7 +88,6 @@ const Navbar = () => {
   }
 
   const renderNavbarMenu = () => {
-    
     return (
       <div className='navbar-menu'>
         <div className='item' onClick={() => handleClick('home')}>
