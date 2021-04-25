@@ -141,32 +141,65 @@ export const getProfileByUserId = async (userId) => {
   return data[0];
 }
 
+export const getJobProviderByJobId = async (jobId) => {
+  const job = await getJobById(jobId);
+  return job.provider;
+}
+
 export const createRequestPost = async (requestData) => {
   const currentUser = await fetchCurrentUser();
+  const jobProvider = await getJobProviderByJobId(requestData.job_id);
   await db.collection('requests').add({
     ...requestData,
     requester: {
       id: currentUser.user_id,
       name: currentUser.name
     },
+    jobProvider,
     status: 'WAITING-CONFIRMATION'
   });
 }
 
-export const getRequestsByStatus = async (user_id, status) => {
+export const getRequestsByStatus = async (user_id, status, role='business') => {
+  const getAllRequestsAsBusiness = async () => {
+    const response = await db.collection('requests')
+    .where('requester.id', '==', user_id)
+    .get();
+    return response;
+  }
+
+  const getRequestsAsBusinessByStatus = async () => {
+    const response = await db.collection('requests')
+    .where('status', '==', status)
+    .where('requester.id', '==', user_id)
+    .get();
+    return response;
+  }
+
+  const getAllRequestsAsService = async () => {
+    const response = await db.collection('requests')
+    .where('provider.id', '==', user_id)
+    .get();
+    return response;
+  }
+
+  const getRequestsAsServiceByStatus = async () => {
+    const response = await db.collection('requests')
+    .where('status', '==', status)
+    .where('provider.id', '==', user_id)
+    .get();
+    return response;
+  }
+
   const response = status === 'ALL' ?
-    await db.collection('requests')
-      .where('requester.id', '==', user_id)
-      .get() :
-    await db.collection('requests')
-      .where('status', '==', status)
-      .where('requester.id', '==', user_id)
-      .get();
+    (role === 'business' ? await getAllRequestsAsBusiness() : await getAllRequestsAsService()) :
+    (role === 'business' ? await getRequestsAsBusinessByStatus() : await getRequestsAsServiceByStatus())
+  
   const data = response.docs.map(doc => {
     const responseId = doc.id;
     const responseData = doc.data();
     return { request_id: responseId, ...responseData }
   });
+
   return data;
 }
-

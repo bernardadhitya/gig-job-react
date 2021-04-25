@@ -24,7 +24,6 @@ const BusinessOwnerNavigation = ({match}) => {
       <PrivateRoute exact path={`${match.url}/profil/:id`} component={BusinessJobPosterProfilePage}/>
       <PrivateRoute path={`${match.url}/profil`} component={DummyPage}/>
       <PrivateRoute path={`${match.url}/:id`} component={BusinessJobDetailPage}/>
-      
     </Switch>
   )
 }
@@ -34,7 +33,7 @@ const ServiceProviderNavigation = ({match}) => {
     <Switch>
       <PrivateRoute exact path={match.url} component={ServiceJobsPage}/>
       <PrivateRoute path={`${match.url}/pekerjaan`} component={ServiceCreateJobPage}/>
-      <PrivateRoute path={`${match.url}/pesanan`} component={DummyPage}/>
+      <PrivateRoute path={`${match.url}/pesanan`} component={BusinessOrdersPage}/>
       <PrivateRoute path={`${match.url}/chat`} component={DummyPage}/>
       <PrivateRoute exact path={`${match.url}/profil/:id`} component={BusinessJobPosterProfilePage}/>
       <PrivateRoute path={`${match.url}/profil`} component={DummyPage}/>

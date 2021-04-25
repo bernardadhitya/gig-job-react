@@ -3,10 +3,15 @@ import React, {useState, useEffect} from 'react';
 import { fetchCurrentUser, getRequestsByStatus } from '../../firebase';
 import OrderCard from '../../Components/OrderCard/OrderCard';
 import FilterSection from '../../Components/FilterSection/FilterSection';
+import { useLocation } from 'react-router';
 
 const BusinessOrdersPage = () => {
   const [requests, setRequests] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('ALL');
+
+  const location = useLocation();
+
+  const currentRole = location.pathname.split('/')[1];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -14,11 +19,11 @@ const BusinessOrdersPage = () => {
       if (!currentUser) return;
       const { user_id } = currentUser;
 
-      const fetchedRequests = await getRequestsByStatus(user_id, selectedStatus);
+      const fetchedRequests = await getRequestsByStatus(user_id, selectedStatus, currentRole);
       setRequests(fetchedRequests);
     }
     fetchData();
-  }, [selectedStatus]);
+  }, [selectedStatus, currentRole]);
 
   const renderRequestCards = () => {
     return requests.map(request => <OrderCard request={request}/>);
