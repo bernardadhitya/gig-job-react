@@ -3,10 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { formattedCurrency, formattedDescription } from '../../Constants/format';
 import { TRANSLATED_STATUS } from '../../Constants/status';
 import { getJobById } from '../../firebase';
+import WaitingProgressDetailSection from '../OrderCardDetailSections/WaitingProgressDetailSection';
 import './OrderCard.css';
 
 const OrderCard = (props) => {
-  const { request: { job_id, status }} = props;
+  const { request } = props;
+  const { job_id, status } = request;
 
   const [job, setJob] = useState(null);
 
@@ -36,6 +38,18 @@ const OrderCard = (props) => {
     )
   }
 
+  const renderOrderCardDetailSection = () => {
+    const detailSections = {
+      'WAITING-CONFIRMATION': <></>,
+      'WAITING-PAYMENT': <></>,
+      'WAITING-PROGRESS': <WaitingProgressDetailSection request={request}/>,
+      'IN-PROGRESS': <></>,
+      'DONE': <></>,
+      'REJECTED': <></>,
+    }
+    return detailSections[status];
+  }
+
   return job ? (
     <div className='order-card'>
       <Grid container>
@@ -53,6 +67,9 @@ const OrderCard = (props) => {
           <p>{formattedDescription(job.description)}</p>
           <h5>{job.provider.name}</h5>
           <p>{job.location}</p>
+        </Grid>
+        <Grid item xs={12}>
+          { renderOrderCardDetailSection() }
         </Grid>
       </Grid>
     </div>
