@@ -1,16 +1,22 @@
 import { Grid } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router';
+import { actions } from '../../Constants/actions';
 import { formattedCurrency, formattedDescription } from '../../Constants/format';
 import { TRANSLATED_STATUS } from '../../Constants/status';
-import { getJobById } from '../../firebase';
+import { getJobById, updateRequestStatusNextStage, updateRequestStatusToRejected } from '../../firebase';
 import InProgressDetailSection from '../OrderCardDetailSections/InProgressDetailSection';
 import RejectedDetailSection from '../OrderCardDetailSections/RejectedDetailSection';
 import WaitingProgressDetailSection from '../OrderCardDetailSections/WaitingProgressDetailSection';
 import './OrderCard.css';
 
 const OrderCard = (props) => {
-  const { request } = props;
-  const { job_id, status } = request;
+  const { request, response } = props;
+  const { request_id, job_id, status } = request;
+
+  const location = useLocation();
+
+  const currentRole = location.pathname.split('/')[1];
 
   const [job, setJob] = useState(null);
 
@@ -52,6 +58,47 @@ const OrderCard = (props) => {
     return detailSections[status];
   }
 
+  const handleActionClicked = async (action) => {
+    if (action === 'next'){
+      await updateRequestStatusNextStage(request_id, status);
+      response({severity: 'success'});
+    } else if (action === 'reject'){
+      await updateRequestStatusToRejected(request_id);
+      response({severity: 'error'})
+    }
+  }
+
+  const renderOrderCardActionSection = () => {
+    const actionSections = actions[currentRole][status];
+    return (
+      <Grid container spacing={1}>
+        {actionSections.map(actionSection => {
+          const { style, color, title, action } = actionSection;
+          return (
+            <Grid item xs={12/actionSections.length}>
+              <div
+                style={{
+                  color: style === 'outline' ? color : 'white',
+                  borderColor: style === 'outline' ? color : 'none',
+                  borderWidth: style === 'outline' ? '1px' : 0,
+                  backgroundColor: style === 'fill' ? color : 'white',
+                  borderStyle: 'solid',
+                  padding: '2px',
+                  borderRadius: '15px',
+                  textAlign: 'center',
+                  margin: '10px',
+                  cursor: 'pointer'
+                }}
+                onClick={() => handleActionClicked(action)}
+              >
+                <h5>{title}</h5>
+              </div>
+            </Grid>
+          )})}
+      </Grid>
+    )
+  }
+
   return job ? (
     <div className='order-card'>
       <Grid container>
@@ -72,6 +119,9 @@ const OrderCard = (props) => {
         </Grid>
         <Grid item xs={12}>
           { renderOrderCardDetailSection() }
+        </Grid>
+        <Grid item xs={12}>
+          { renderOrderCardActionSection() }
         </Grid>
       </Grid>
     </div>

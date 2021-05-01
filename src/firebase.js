@@ -155,9 +155,23 @@ export const createRequestPost = async (requestData) => {
       id: currentUser.user_id,
       name: currentUser.name
     },
-    jobProvider,
+    provider: jobProvider,
     status: 'WAITING-CONFIRMATION'
   });
+}
+
+export const updateRequestStatusNextStage = async (requestId, status) => {
+  const updatedStatus = {
+    'WAITING-CONFIRMATION': 'WAITING-PAYMENT',
+    'WAITING-PAYMENT': 'WAITING-PROGRESS',
+    'WAITING-PROGRESS': 'IN-PROGRESS',
+    'IN-PROGRESS': 'DONE',
+  }
+  await db.collection('requests').doc(requestId).update({ status: updatedStatus[status] })
+}
+
+export const updateRequestStatusToRejected = async (requestId) => {
+  await db.collection('requests').doc(requestId).update({ status: 'REJECTED' })
 }
 
 export const getRequestsByStatus = async (user_id, status, role='business') => {
