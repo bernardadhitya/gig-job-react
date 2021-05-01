@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { formattedCurrency, formattedDescription } from '../../Constants/format';
 import { TRANSLATED_STATUS } from '../../Constants/status';
 import { getJobById } from '../../firebase';
+import InProgressDetailSection from '../OrderCardDetailSections/InProgressDetailSection';
+import RejectedDetailSection from '../OrderCardDetailSections/RejectedDetailSection';
 import WaitingProgressDetailSection from '../OrderCardDetailSections/WaitingProgressDetailSection';
 import './OrderCard.css';
 
@@ -43,9 +45,9 @@ const OrderCard = (props) => {
       'WAITING-CONFIRMATION': <></>,
       'WAITING-PAYMENT': <></>,
       'WAITING-PROGRESS': <WaitingProgressDetailSection request={request}/>,
-      'IN-PROGRESS': <></>,
+      'IN-PROGRESS': <InProgressDetailSection request={request}/>,
       'DONE': <></>,
-      'REJECTED': <></>,
+      'REJECTED': <RejectedDetailSection request={request}/>,
     }
     return detailSections[status];
   }
