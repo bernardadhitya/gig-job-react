@@ -139,10 +139,21 @@ export const getProfileByUserId = async (userId) => {
   const data = response.docs.map(doc => {
       const responseId = doc.id;
       const responseData = doc.data();
-      return { user_id: responseId, ...responseData }
+      return { profile_id: responseId, ...responseData }
   });
   console.log(data);
   return data[0];
+}
+
+export const createOrUpdateProfile = async (profileData, userId) => {
+  const profileExist = await getProfileByUserId(userId);
+  let response;
+  if(!!profileExist){
+    response = await db.collection('profiles').doc(profileExist.profile_id).update(profileData);
+  } else {
+    response = await db.collection('profiles').add(profileData);
+  }
+  return response;
 }
 
 export const getJobProviderByJobId = async (jobId) => {

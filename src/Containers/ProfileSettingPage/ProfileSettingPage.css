@@ -1,0 +1,30 @@
+.profile-setting-wrapper{
+  background-color: #F8FBFF;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.multple-fields-wrapper{
+  border: 1px solid #3183CD;
+  background-color: #c5e2fc;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.multple-fields-wrapper h4{
+  color: #1A3E60;
+}
+
+.multple-fields-wrapper p{
+  color: #4e4e4e;
+}
+
+.form-submit-button {
+  background-color: #1A3E60;
+  cursor: pointer;
+  padding: 2px;
+  text-align: center;
+  border-radius: 10px;
+  margin: 20px 0;
+}

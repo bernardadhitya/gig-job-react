@@ -1,6 +1,9 @@
-import { Grid, MenuItem, Modal, Select, TextField } from '@material-ui/core';
+import { Grid, MenuItem, Modal, Select, Snackbar, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createOrUpdateProfile, fetchCurrentUser } from '../../firebase';
+import './ProfileSettingPage.css';
+import MuiAlert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -32,6 +35,7 @@ const ProfileSettingPage = () => {
   const [languages, setLanguages] = useState([]);
   const [certifications, setCertifications] = useState([]);
   const [selectedModal, setSelectedModal] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const [title, setTitle] = useState('');
   const [startDate, setStartDate] = useState(new Date());
@@ -40,8 +44,18 @@ const ProfileSettingPage = () => {
   const [certificationDesc, setCertificationDesc] = useState('');
   const [level, setLevel] = useState(1);
 
-  const renderModalBody = (label) => {
+  const [currentUser, setCurrentUser] = useState(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedCurrentUser = await fetchCurrentUser();
+      console.log(fetchedCurrentUser);
+      setCurrentUser(fetchedCurrentUser);
+    }
+    fetchData();
+  }, []);
+
+  const renderModalBody = (label) => {
     const modalBodies = {
       'Pengalaman Kerja': 
         <div className={classes.paper}>
@@ -92,7 +106,12 @@ const ProfileSettingPage = () => {
                     cursor: 'pointer'
                   }}
                   onClick={() => {
-                    setExperiences([...experiences, {title, startDate, endDate}]);
+                    const newExperience = {
+                      title,
+                      startDate: new Date(startDate),
+                      endDate: new Date(endDate)
+                    }
+                    setExperiences([...experiences, newExperience]);
                     handleCloseModal();
                   }}
                 >
@@ -151,7 +170,12 @@ const ProfileSettingPage = () => {
                     cursor: 'pointer'
                   }}
                   onClick={() => {
-                    setEducations([...educations, {title, startDate, endDate}]);
+                    const newEducation = {
+                      title,
+                      startDate: new Date(startDate),
+                      endDate: new Date(endDate)
+                    }
+                    setEducations([...educations, newEducation]);
                     handleCloseModal();
                   }}
                 >
@@ -209,8 +233,13 @@ const ProfileSettingPage = () => {
                     cursor: 'pointer'
                   }}
                   onClick={() => {
+                    const newCertification = {
+                      title,
+                      dateIssued: new Date(dateIssued),
+                      description: certificationDesc
+                    }
                     setCertifications(
-                      [...certifications, {title, dateIssued, certificationDesc: description}]);
+                      [...certifications, newCertification]);
                     handleCloseModal();
                   }}
                 >
@@ -292,7 +321,7 @@ const ProfileSettingPage = () => {
         >
           {`+ Tambahkan ${label}`}
         </h6>
-        {values.map(value => (<p>{value.title}</p>))}
+        {values.map((value, idx) => (<h5>{`${idx+1}. ${value.title}`}</h5>))}
         <Modal
           open={selectedModal === label}
           onClose={() => setSelectedModal('')}
@@ -304,145 +333,191 @@ const ProfileSettingPage = () => {
     )
   }
 
+  const handleSubmitButtonClicked = async () => {
+    if (currentUser === null) return;
+    const submittedProfile = {
+      address,
+      certifications,
+      educations,
+      experiences,
+      languages,
+      gender,
+      description,
+      name: firstName + ' ' + lastName,
+      dob: new Date(dob),
+      user_id: currentUser.user_id,
+      email: currentUser.email
+    };
+    await createOrUpdateProfile(submittedProfile, currentUser.user_id);
+    setOpenSnackbar(true);
+  }
+
+  const Alert = (props) => {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={2}></Grid>
-      <Grid item xs={8}>
-        <div className='profile-setting-wrapper'>
-          <h4>Informasi Pribadi</h4>
-          <p>Nama Lengkap</p>
-          <Grid container spacing={3}>
-            <Grid item xs={6}>
-              <TextField
-                value={firstName}
-                label="Nama Depan"
+    <>
+      <Grid container spacing={3}>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={8}>
+          <div className='profile-setting-wrapper'>
+            <h4>Informasi Pribadi</h4>
+            <p>Nama Lengkap</p>
+            <Grid container spacing={3}>
+              <Grid item xs={6}>
+                <TextField
+                  value={firstName}
+                  label="Nama Depan"
+                  variant="outlined"
+                  onChange={(e) => setFirstName(e.target.value)}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  value={lastName}
+                  label="Nama Belakang"
+                  variant="outlined"
+                  onChange={(e) => setLastName(e.target.value)}
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
+            <p>Tanggal Lahir</p>
+            <Grid container spacing={3}>
+              <Grid item xs={6}>
+                <TextField
+                  id="date"
+                  label="Tanggal"
+                  type="date"
+                  defaultValue={dob.toString()}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  variant="outlined"
+                  fullWidth="true"
+                  value={dob}
+                  onChange={(e) => setDob(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+            <p>Gender</p>
+            <Grid container spacing={3}>
+              <Grid item xs={6}>
+              <Select
                 variant="outlined"
-                onChange={(e) => setFirstName(e.target.value)}
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                label="Gender"
                 fullWidth
-              />
+              >
+                <MenuItem value={'m'}>Pria</MenuItem>
+                <MenuItem value={'f'}>Wanita</MenuItem>
+              </Select>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <TextField
-                value={lastName}
-                label="Nama Belakang"
-                variant="outlined"
-                onChange={(e) => setLastName(e.target.value)}
-                fullWidth
-              />
+            <p>Alamat</p>
+            <Grid container spacing={3}>
+              <Grid item xs={6}>
+                <TextField
+                  id="city"
+                  label="Kota"
+                  type="text"
+                  defaultValue=""
+                  variant="outlined"
+                  fullWidth="true"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  id="zipCode"
+                  label="Kode Pos"
+                  type="text"
+                  defaultValue=""
+                  variant="outlined"
+                  fullWidth="true"
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  id="address"
+                  label="Alamat"
+                  type="text"
+                  defaultValue=""
+                  variant="outlined"
+                  fullWidth="true"
+                  multiline
+                  rows={4}
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </Grid>
             </Grid>
-          </Grid>
-          <p>Tanggal Lahir</p>
-          <Grid container spacing={3}>
-            <Grid item xs={6}>
-              <TextField
-                id="date"
-                label="Tanggal"
-                type="date"
-                defaultValue={dob.toString()}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                variant="outlined"
-                fullWidth="true"
-                value={dob}
-                onChange={(e) => setDob(e.target.value)}
-              />
+            <h4>Informasi Kontak</h4>
+            <p>Nomor Telepon</p>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <TextField
+                  id="phone"
+                  label="Nomor Telepon"
+                  type="text"
+                  defaultValue=""
+                  variant="outlined"
+                  fullWidth="true"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+              </Grid>
             </Grid>
-          </Grid>
-          <p>Gender</p>
-          <Grid container spacing={3}>
-            <Grid item xs={6}>
-            <Select
+            <h4>Tentang Saya</h4>
+            <p>Tentang Saya</p>
+            <TextField
+              id="description"
+              label="Tentang Saya"
+              type="text"
+              defaultValue=""
               variant="outlined"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              label="Gender"
-              fullWidth
-            >
-              <MenuItem value={'m'}>Pria</MenuItem>
-              <MenuItem value={'f'}>Wanita</MenuItem>
-            </Select>
+              fullWidth="true"
+              multiline
+              rows={4}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            {renderMultipleFields(experiences, setExperiences, 'Pengalaman Kerja')}
+            {renderMultipleFields(educations, setEducations, 'Edukasi & Pelatihan')}
+            {renderMultipleFields(certifications, setCertifications, 'Sertifikasi')}
+            {renderMultipleFields(languages, setLanguages, 'Bahasa')}
+            <Grid container spacing={3}>
+              <Grid item xs={6}></Grid>
+              <Grid item xs={6}>
+                <div className='form-submit-button' onClick={() => handleSubmitButtonClicked()}>
+                  <h3>Simpan</h3>
+                </div>
+              </Grid>
             </Grid>
-          </Grid>
-          <p>Alamat</p>
-          <Grid container spacing={3}>
-            <Grid item xs={6}>
-              <TextField
-                id="city"
-                label="Kota"
-                type="text"
-                defaultValue=""
-                variant="outlined"
-                fullWidth="true"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                id="zipCode"
-                label="Kode Pos"
-                type="text"
-                defaultValue=""
-                variant="outlined"
-                fullWidth="true"
-                value={zipCode}
-                onChange={(e) => setZipCode(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                id="address"
-                label="Alamat"
-                type="text"
-                defaultValue=""
-                variant="outlined"
-                fullWidth="true"
-                multiline
-                rows={4}
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            </Grid>
-          </Grid>
-          <h4>Informasi Kontak</h4>
-          <p>Nomor Telepon</p>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <TextField
-                id="phone"
-                label="Nomor Telepon"
-                type="text"
-                defaultValue=""
-                variant="outlined"
-                fullWidth="true"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </Grid>
-          </Grid>
-          <h4>Tentang Saya</h4>
-          <p>Tentang Saya</p>
-          <TextField
-            id="description"
-            label="Tentang Saya"
-            type="text"
-            defaultValue=""
-            variant="outlined"
-            fullWidth="true"
-            multiline
-            rows={4}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          {renderMultipleFields(experiences, setExperiences, 'Pengalaman Kerja')}
-          {renderMultipleFields(educations, setEducations, 'Edukasi & Pelatihan')}
-          {renderMultipleFields(certifications, setCertifications, 'Sertifikasi')}
-          {renderMultipleFields(languages, setLanguages, 'Bahasa')}
-        </div>
+          </div>
+        </Grid>
+        <Grid item xs={2}></Grid>
       </Grid>
-      <Grid item xs={2}></Grid>
-    </Grid>
+      <Snackbar
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'center',
+      }}
+      open={openSnackbar}
+      autoHideDuration={6000}
+      onClose={() => setOpenSnackbar(false)}
+    >
+      <Alert onClose={() => setOpenSnackbar(false)} severity="success">
+        Profil sudah diperbarui
+      </Alert>
+    </Snackbar>
+  </>
   )
 }
 
