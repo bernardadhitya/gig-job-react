@@ -10,6 +10,7 @@ import {
   ListItemIcon,
   ListItemText
 } from '@material-ui/core';
+import { signOut } from '../../firebase';
 
 const StyledMenu = withStyles({
   paper: {
@@ -63,13 +64,13 @@ const Navbar = () => {
       home: '/business',
       orders: '/business/pesanan',
       chat: '/business/chat',
-      profile: '/business/profil'
+      profile: '/business/profil',
     }
     const serviceRoutes = {
       home: '/service',
       orders: '/service/pesanan',
       chat: '/service/chat',
-      profile: '/service/profil'
+      profile: '/service/profil',
     }
 
     if (currentRole === 'business'){
@@ -81,9 +82,16 @@ const Navbar = () => {
 
   const handleRedirectProfile = (option) => {
     const routes = {
-      switch: currentRole === 'business' ? '/service' : '/business'
+      switch: currentRole === 'business' ? '/service' : '/business',
+      setting: `/${currentRole}/profil`
     }
+    handleClose();
     history.push(routes[option]);
+  }
+
+  const handleLogout = async () => {
+    await signOut();
+    history.push('/login');
   }
 
   const renderNavbarMenu = () => {
@@ -119,10 +127,10 @@ const Navbar = () => {
               <ListItemIcon/>
             </StyledMenuItem>
             <StyledMenuItem onClick={() => handleRedirectProfile('setting')}>
-              <ListItemText primary="Pengaturan" />
+              <ListItemText primary="Pengaturan Profil" />
               <ListItemIcon/>
             </StyledMenuItem>
-            <StyledMenuItem onClick={() => handleRedirectProfile('logout')}>
+            <StyledMenuItem onClick={() => handleLogout()}>
               <ListItemText primary="Keluar" />
               <ListItemIcon/>
             </StyledMenuItem>
