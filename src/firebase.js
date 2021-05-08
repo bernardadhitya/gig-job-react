@@ -52,6 +52,7 @@ export const getUserByEmail = async (email) => {
 
 export const createUser = async (userId, userData) => {
   const user = await db.collection('users').doc(userId).set(userData);
+  await db.collection('wishlists').doc(userId).set({user_id: userId, wishlist: []});
   return user;
 }
 
@@ -316,4 +317,21 @@ export const getRequestsByStatus = async (user_id, status, role='business') => {
   };
   const allRequests = await getAllRequests(allIds);
   return allRequests;
+}
+
+export const getWishlistByCurrentUserId = async () => {
+  const currentUser = await fetchCurrentUser();
+  const response = await db.collection('wishlists').doc(currentUser.user_id).get();
+  const responseId = response.id;
+  const responseData = response.data();
+  return { wishlist_id: responseId, ...responseData };
+}
+
+export const addToWishlist = async (jobId) => {
+  const currentUserWishlist = await getWishlistByCurrentUserId();
+  const { user_id, wishlist } = currentUserWishlist;
+  const newWishlist = await db.collection('wishlists').doc(user_id).update({
+    wishlist: wishlist.push(jobId)
+  });
+  return newWishlist;
 }
