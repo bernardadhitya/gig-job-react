@@ -37,6 +37,7 @@ export const signOut = async () => {
 export const fetchCurrentUser = async () => {
   const isLoggedIn = fireAuth.currentUser;
   const userData = isLoggedIn ? await getUserByEmail(isLoggedIn.email) : null;
+  console.log(userData);
   return isLoggedIn ? userData[0] : userData;
 }
 
@@ -70,7 +71,6 @@ export const createJobPost = async (jobData, image) => {
     },
     status: 'ACTIVE-JOB'
   });
-  console.log(job);
   await uploadImage(image, job);
 }
 
@@ -85,11 +85,9 @@ export const getImageUrlByImageRef = async (imageRef) => {
 
 export const getImageByJobId = async (jobId) => {
   const doc = await db.collection('jobs').doc(jobId).get();
-  console.log(doc.data().filePath);
   if (doc.data().filePath === '') return '';
   const fpath = '/' + jobId + '/' + doc.data().filePath;
   const response = await storage.child(fpath).getDownloadURL().then((url) => {
-    console.log(url);
     return url;
   }).catch(function (error) {
     return '';
@@ -202,7 +200,6 @@ export const getProfileByUserId = async (userId) => {
       const responseData = doc.data();
       return { profile_id: responseId, ...responseData }
   });
-  console.log(data);
   return data[0];
 }
 
@@ -304,7 +301,6 @@ export const getRequestsByStatus = async (user_id, status, role='business') => {
   }
 
   const allIds = await getAllIds();
-  console.log(allIds);
 
   const getAllRequests = async (requestIds) => {
     return Promise.all(
@@ -324,14 +320,27 @@ export const getWishlistByCurrentUserId = async () => {
   const response = await db.collection('wishlists').doc(currentUser.user_id).get();
   const responseId = response.id;
   const responseData = response.data();
+  console.log({ wishlist_id: responseId, ...responseData });
   return { wishlist_id: responseId, ...responseData };
 }
 
 export const addToWishlist = async (jobId) => {
   const currentUserWishlist = await getWishlistByCurrentUserId();
   const { user_id, wishlist } = currentUserWishlist;
+  const tempWishlist = wishlist;
+  tempWishlist.push(jobId);
   const newWishlist = await db.collection('wishlists').doc(user_id).update({
-    wishlist: wishlist.push(jobId)
+    wishlist: tempWishlist
+  });
+  return newWishlist;
+}
+
+export const removeFromWishlist = async (jobId) => {
+  const currentUserWishlist = await getWishlistByCurrentUserId();
+  const { user_id, wishlist } = currentUserWishlist;
+  const tempWishlist = wishlist.filter(job => job !== jobId);
+  const newWishlist = await db.collection('wishlists').doc(user_id).update({
+    wishlist: tempWishlist
   });
   return newWishlist;
 }
