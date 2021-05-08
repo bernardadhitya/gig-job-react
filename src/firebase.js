@@ -115,6 +115,22 @@ export const getAllJobs = async () => {
   return allJobs;
 }
 
+export const getAllJobsInWishlist = async () => {
+  const response = await getWishlistByCurrentUserId();
+  const allId = response.wishlist;
+  const getAllPost = async (jobIds) => {
+    return Promise.all(
+      jobIds.map(async (jobId) => {
+        const jobPost = await getJobById(jobId)
+        const imageUrl = await getImageByJobId(jobId)
+        return { ...jobPost, imageUrl };
+      })
+    );
+  };
+  const allJobs = await getAllPost(allId);
+  return allJobs;
+}
+
 export const getJobsByUserId = async (userId) => {
   const getAllId = async () => {
     const responses = await db.collection('jobs').where('provider.id', '==', userId).get();

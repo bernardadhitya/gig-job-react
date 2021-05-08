@@ -9,6 +9,7 @@ import BusinessJobPosterProfilePage from '../../Containers/BusinessJobPosterProf
 import ServiceJobsPage from '../../Containers/ServiceJobsPage/ServiceJobsPage';
 import ServiceCreateJobPage from '../../Containers/ServiceCreateJobPage/ServiceCreateJobPage';
 import ProfileSettingPage from '../../Containers/ProfileSettingPage/ProfileSettingPage';
+import BusinessWishlistPage from '../../Containers/BusinessWishlishPage/BusinessWishlistPage';
 
 const DummyPage = () => {
   return (
@@ -24,6 +25,7 @@ const BusinessOwnerNavigation = ({match}) => {
       <PrivateRoute path={`${match.url}/chat`} component={DummyPage}/>
       <PrivateRoute exact path={`${match.url}/profil/:id`} component={BusinessJobPosterProfilePage}/>
       <PrivateRoute path={`${match.url}/profil`} component={ProfileSettingPage}/>
+      <PrivateRoute path={`${match.url}/wishlist`} component={BusinessWishlistPage}/>
       <PrivateRoute path={`${match.url}/:id`} component={BusinessJobDetailPage}/>
     </Switch>
   )

@@ -83,7 +83,8 @@ const Navbar = () => {
   const handleRedirectProfile = (option) => {
     const routes = {
       switch: currentRole === 'business' ? '/service' : '/business',
-      setting: `/${currentRole}/profil`
+      setting: `/${currentRole}/profil`,
+      wishlist: '/business/wishlist'
     }
     handleClose();
     history.push(routes[option]);
@@ -126,6 +127,13 @@ const Navbar = () => {
               />
               <ListItemIcon/>
             </StyledMenuItem>
+            {
+              currentRole === 'business' &&
+                <StyledMenuItem onClick={() => handleRedirectProfile('wishlist')}>
+                  <ListItemText primary="Favorit" />
+                  <ListItemIcon/>
+                </StyledMenuItem>
+            }
             <StyledMenuItem onClick={() => handleRedirectProfile('setting')}>
               <ListItemText primary="Pengaturan Profil" />
               <ListItemIcon/>
