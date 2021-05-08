@@ -8,11 +8,22 @@ const fireAuth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage().ref();
 
+export const signUp = async (email, password, name) => {
+  let userData = {};
+  fireAuth.createUserWithEmailAndPassword(email, password)
+    .then(async data => {
+      userData = await createUser(data.uid, {name, email});
+      console.log('SUCCESS SIGN UP');
+    })
+    .catch(error => console.log('FAILED SIGNUP'));
+  return userData;
+}
+
 export const signIn = async (email, password) => {
   let userData = {};
   fireAuth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      userData = getUserByEmail(email);
+    .then(async () => {
+      userData = await getUserByEmail(email);
       console.log('SUCCESS SIGN IN');
     })
     .catch(error => console.log('FAILED SIGNIN'))
@@ -37,6 +48,11 @@ export const getUserByEmail = async (email) => {
       return { user_id: responseId, ...responseData }
   });
   return data;
+}
+
+export const createUser = async (userId, userData) => {
+  const user = await db.collection('users').doc(userId).set(userData);
+  return user;
 }
 
 export const uploadImage = async (file, job) => {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Login.css';
 import { Grid, TextField } from '@material-ui/core';
-import { signIn } from '../../firebase';
+import { signIn, signUp } from '../../firebase';
 import { useHistory } from "react-router-dom"
 import { fetchCurrentUser } from '../../firebase';
 
@@ -16,9 +16,21 @@ const Login = () => {
 
   const handleLogin = async () => {
     await signIn(email, password);
-    const user = await fetchCurrentUser();
 
-    if (user) {
+    setTimeout(handleAuthentication, 2000);
+  }
+
+  const handleRegister = async () => {
+    const fullName = firstName + ' ' + lastName;
+    await signUp(email, password, fullName);
+
+    setTimeout(handleAuthentication, 2000);
+  }
+
+  const handleAuthentication = async () => {
+    const currentUser = await fetchCurrentUser();
+    console.log(currentUser);
+    if (currentUser) {
       history.push('/business');
     } else {
       window.alert('Wrong email/password. Please try again');
@@ -77,7 +89,12 @@ const Login = () => {
             onChange={(e) => {setPassword(e.target.value)}}
           />
         </div>
-        <div className="form-item" onClick={() => handleLogin()}>
+        <div
+          className="form-item"
+          onClick={() => {
+            mode === 'login' ? handleLogin() : handleRegister();
+          }}
+        >
           <div className="login-btn">
             { mode === 'login' ? 'Masuk' : 'Daftar'}
           </div>
