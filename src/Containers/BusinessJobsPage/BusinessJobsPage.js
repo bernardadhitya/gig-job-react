@@ -32,11 +32,7 @@ const BusinessJobsPage = () => {
         <div className='job-card' onClick={() => handleClickJob(job_id)}>
           <img
             src={imageUrl}
-            style={{
-              width: '100%',
-              maxHeight: '150px',
-              objectFit: 'cover'
-            }}
+            className='image-thumbnail'
             alt=''
             />
           <h4>{title}</h4>

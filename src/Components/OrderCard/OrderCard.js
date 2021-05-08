@@ -4,7 +4,7 @@ import { useLocation } from 'react-router';
 import { actions } from '../../Constants/actions';
 import { formattedCurrency, formattedDescription } from '../../Constants/format';
 import { TRANSLATED_STATUS } from '../../Constants/status';
-import { getJobById, updateRequestStatusNextStage, updateRequestStatusToRejected } from '../../firebase';
+import { getImageByJobId, getJobById, updateRequestStatusNextStage, updateRequestStatusToRejected } from '../../firebase';
 import InProgressDetailSection from '../OrderCardDetailSections/InProgressDetailSection';
 import RejectedDetailSection from '../OrderCardDetailSections/RejectedDetailSection';
 import WaitingProgressDetailSection from '../OrderCardDetailSections/WaitingProgressDetailSection';
@@ -23,7 +23,8 @@ const OrderCard = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       const fetchedJob = await getJobById(job_id);
-      setJob(fetchedJob);
+      const fetchedImage = await getImageByJobId(job_id);
+      setJob({...fetchedJob, imageUrl: fetchedImage});
     }
     fetchData();
   }, []);
@@ -103,9 +104,10 @@ const OrderCard = (props) => {
     <div className='order-card'>
       <Grid container>
         <Grid item xs={4}>
-
+          <img src={job.imageUrl} className='image-thumbnail' alt=''/>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={7}>
           <Grid container>
             <Grid item xs={6}>
               <h4>{job.title}</h4>

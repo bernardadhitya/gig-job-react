@@ -11,3 +11,10 @@
 .job-card h3{
   color: #3183CD;
 }
+
+.job-card .image-thumbnail {
+  width: 100%;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}

@@ -215,6 +215,13 @@ export const createRequestPost = async (requestData) => {
   });
 }
 
+export const getRequestById = async (requestId) => {
+  const response = await db.collection('requests').doc(requestId).get();
+  const responseId = response.id;
+  const responseData = response.data();
+  return { request_id: responseId, ...responseData };
+}
+
 export const updateRequestStatusNextStage = async (requestId, status) => {
   const updatedStatus = {
     'WAITING-CONFIRMATION': 'WAITING-PAYMENT',
@@ -260,15 +267,33 @@ export const getRequestsByStatus = async (user_id, status, role='business') => {
     return response;
   }
 
-  const response = status === 'ALL' ?
+  const getAllIds = async () => {
+    const data = status === 'ALL' ?
     (role === 'business' ? await getAllRequestsAsBusiness() : await getAllRequestsAsService()) :
-    (role === 'business' ? await getRequestsAsBusinessByStatus() : await getRequestsAsServiceByStatus())
-  
-  const data = response.docs.map(doc => {
-    const responseId = doc.id;
-    const responseData = doc.data();
-    return { request_id: responseId, ...responseData }
-  });
+    (role === 'business' ? await getRequestsAsBusinessByStatus() : await getRequestsAsServiceByStatus()); 
 
-  return data;
+    const requests = data.docs.map(doc => {
+      const responseId = doc.id;
+      const responseData = doc.data();
+      return { request_id: responseId, ...responseData }
+    });
+
+    const requestIds = requests.map(doc => ({request_id: doc.request_id, job_id: doc.job_id}));
+    return requestIds
+  }
+
+  const allIds = await getAllIds();
+  console.log(allIds);
+
+  const getAllRequests = async (requestIds) => {
+    return Promise.all(
+      requestIds.map(async (requestId) => {
+        const { request_id, job_id } = requestId;
+        const request = await getRequestById(request_id);
+        const imageUrl = await getImageByJobId(job_id);
+        return { ...request, imageUrl };
+      }));
+  };
+  const allRequests = await getAllRequests(allIds);
+  return allRequests;
 }
