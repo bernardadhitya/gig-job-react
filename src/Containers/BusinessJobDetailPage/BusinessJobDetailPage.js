@@ -1,7 +1,7 @@
 import { Grid, Snackbar } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { createRequestPost, getJobById } from '../../firebase';
+import { createRequestPost, getImageByJobId, getJobById } from '../../firebase';
 import './BusinessJobDetailPage.css';
 import MuiAlert from '@material-ui/lab/Alert';
 import RequestForm from '../../Components/RequestForm/RequestForm';
@@ -24,7 +24,8 @@ const BusinessJobDetailPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const fetchedJob = await getJobById(id);
-      setJob(fetchedJob);
+      const fetchedImageByJobId = await getImageByJobId(id);
+      setJob({...fetchedJob, imageUrl: fetchedImageByJobId});
     }
     fetchData();
   }, []);
@@ -76,6 +77,11 @@ const BusinessJobDetailPage = () => {
       <Grid container spacing={3}>
       <Grid item xs={1}></Grid>
         <Grid item xs={6}>
+          <img
+            src={job ? job.imageUrl : ''}
+            className='image-banner'
+            alt=''
+          />
           <h1>{job ? job.title : ''}</h1>
           <h4>Deskripsi Jasa</h4>
           <p>{job ? job.description : ''}</p>
