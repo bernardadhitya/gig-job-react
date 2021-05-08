@@ -82,14 +82,38 @@ export const getImageUrlByImageRef = async (imageRef) => {
   return response;
 }
 
-export const getAllJobs = async () => {
-  const response = await db.collection('jobs').where('status', '==', 'ACTIVE-JOB').get();
-  const data = response.docs.map(doc => {
-    const responseId = doc.id;
-    const responseData = doc.data();
-    return { job_id: responseId, ...responseData }
+export const getImageByJobId = async (jobId) => {
+  const doc = await db.collection('jobs').doc(jobId).get();
+  console.log(doc.data().filePath);
+  if (doc.data().filePath === '') return '';
+  const fpath = '/' + jobId + '/' + doc.data().filePath;
+  const response = await storage.child(fpath).getDownloadURL().then((url) => {
+    console.log(url);
+    return url;
+  }).catch(function (error) {
+    return '';
   });
-  return data;
+  return response;
+}
+
+export const getAllJobs = async () => {
+  const getAllId = async () => {
+    const responses = await db.collection('jobs').where('status', '==', 'ACTIVE-JOB').get();
+    const data = responses.docs.map(doc => doc.id);
+    return data;
+  }
+  const allId = await getAllId();
+  const getAllPost = async (jobIds) => {
+    return Promise.all(
+      jobIds.map(async (jobId) => {
+        const jobPost = await getJobById(jobId)
+        const imageUrl = await getImageByJobId(jobId)
+        return { ...jobPost, imageUrl };
+      })
+    );
+  };
+  const allPost = await getAllPost(allId);
+  return allPost;
 }
 
 export const getJobsByUserId = async (userId) => {

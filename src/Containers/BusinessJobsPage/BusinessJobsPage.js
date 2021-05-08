@@ -2,7 +2,7 @@ import { Grid } from '@material-ui/core';
 import React, {useState, useEffect} from 'react';
 import { useHistory } from 'react-router';
 import { formattedCurrency, formattedDescription } from '../../Constants/format';
-import { getAllJobs } from '../../firebase';
+import { getAllJobs, getImageByJobId } from '../../firebase';
 import './BusinessJobsPage.css';
 
 const BusinessJobsPage = () => {
@@ -23,11 +23,22 @@ const BusinessJobsPage = () => {
   }
 
   const renderJobCard = (job) => {
-    const { job_id, description, fee, title, provider, location } = job;
+    console.log(job);
+    const { job_id, description, fee, title, provider, location, imageUrl } = job;
     const { name: providerName } = provider;
+
     return (
       <Grid item xs={3}>
         <div className='job-card' onClick={() => handleClickJob(job_id)}>
+          <img
+            src={imageUrl}
+            style={{
+              width: '100%',
+              maxHeight: '150px',
+              objectFit: 'cover'
+            }}
+            alt=''
+            />
           <h4>{title}</h4>
           <h3>{formattedCurrency(fee)}</h3>
           <p>{formattedDescription(description)}</p>

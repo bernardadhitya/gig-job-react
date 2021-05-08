@@ -37,7 +37,8 @@ const ServiceCreateJobPage = () => {
       jobType,
       description,
       fee,
-      location
+      location,
+      filePath: image !== '' ? image.name : ''
     }
     await createJobPost(jobData, image);
     history.push('/service');
