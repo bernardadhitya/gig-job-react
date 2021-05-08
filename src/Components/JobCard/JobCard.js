@@ -12,7 +12,8 @@ const JobCard = (props) => {
       provider,
       location,
       title,
-      status
+      status,
+      imageUrl
     },
     handleJobStatus
   } = props;
@@ -49,18 +50,20 @@ const JobCard = (props) => {
     <div className='job-card-service'>
       <Grid container>
         <Grid item xs={3}>
-
+          <img src={imageUrl} className='image-thumbnail' alt=''/>
         </Grid>
         <Grid item xs={6}>
-          <Grid container>
-            <Grid item xs={6}>
-              <h4>{title}</h4>
+          <div style={{paddingLeft: '20px'}}>
+            <Grid container>
+              <Grid item xs={6}>
+                <h4>{title}</h4>
+              </Grid>
             </Grid>
-          </Grid>
-          <h3>{formattedCurrency(fee)}</h3>
-          <p>{formattedDescription(description)}</p>
-          <h5>{provider.name}</h5>
-          <p>{location}</p>
+            <h3>{formattedCurrency(fee)}</h3>
+            <p>{formattedDescription(description)}</p>
+            <h5>{provider.name}</h5>
+            <p>{location}</p>
+          </div>
         </Grid>
         <Grid item xs={3}>
           {renderJobOption()}

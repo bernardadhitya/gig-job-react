@@ -112,31 +112,51 @@ export const getAllJobs = async () => {
       })
     );
   };
-  const allPost = await getAllPost(allId);
-  return allPost;
+  const allJobs = await getAllPost(allId);
+  return allJobs;
 }
 
 export const getJobsByUserId = async (userId) => {
-  const response = await db.collection('jobs').where('provider.id', '==', userId).get();
-  const data = response.docs.map(doc => {
-    const responseId = doc.id;
-    const responseData = doc.data();
-    return { job_id: responseId, ...responseData }
-  });
-  return data;
+  const getAllId = async () => {
+    const responses = await db.collection('jobs').where('provider.id', '==', userId).get();
+    const data = responses.docs.map(doc => doc.id);
+    return data;
+  }
+  const allId = await getAllId();
+  const getAllPost = async (jobIds) => {
+    return Promise.all(
+      jobIds.map(async (jobId) => {
+        const jobPost = await getJobById(jobId)
+        const imageUrl = await getImageByJobId(jobId)
+        return { ...jobPost, imageUrl };
+      })
+    );
+  };
+  const allJobs = await getAllPost(allId);
+  return allJobs;
 }
 
 export const getJobsByUserIdAndStatus = async (userId, status) => {
-  const response = await db.collection('jobs')
-    .where('status', '==', status)
-    .where('provider.id', '==', userId)
-    .get();
-  const data = response.docs.map(doc => {
-    const responseId = doc.id;
-    const responseData = doc.data();
-    return { job_id: responseId, ...responseData }
-  });
-  return data;
+  const getAllId = async () => {
+    const responses = await db.collection('jobs')
+      .where('status', '==', status)
+      .where('provider.id', '==', userId)
+      .get();
+    const data = responses.docs.map(doc => doc.id);
+    return data;
+  }
+  const allId = await getAllId();
+  const getAllPost = async (jobIds) => {
+    return Promise.all(
+      jobIds.map(async (jobId) => {
+        const jobPost = await getJobById(jobId)
+        const imageUrl = await getImageByJobId(jobId)
+        return { ...jobPost, imageUrl };
+      })
+    );
+  };
+  const allJobs = await getAllPost(allId);
+  return allJobs;
 }
 
 export const updateJobPost = async (jobId, data) => {
