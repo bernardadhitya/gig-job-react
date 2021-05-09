@@ -199,11 +199,6 @@ export const getJobsByCurrentUserIdAndStatus = async (status) => {
 export const getJobsByQueries = async (queries) => {
   const { query: searchString, minPrice, maxPrice } = queries;
   const getAllId = async () => {
-    // const responses = await db.collection('jobs')
-    //   .orderBy('title')
-    //   .startAt(searchString)
-    //   .endAt(searchString + '\uf8ff')
-    //   .get();
     const searchByString = !!searchString ? db.collection('jobs')
       .orderBy('title')
       .startAt(searchString)
@@ -228,19 +223,11 @@ export const getJobsByQueries = async (queries) => {
     const searchByStringArray = !!stringSnapshot ? stringSnapshot.docs : [];
     const searchByMinPriceArray = !!minPriceSnapshot ? minPriceSnapshot.docs : [];
     const searchByMaxPriceArray = !!maxPriceSnapshot ? maxPriceSnapshot.docs : [];
-
-    console.log('searchByStringArray:',searchByStringArray)
-    console.log('searchByMinPriceArray:',searchByMinPriceArray)
-    console.log('searchByMaxPriceArray:',searchByMaxPriceArray)
         
     const allSearch = [searchByStringArray, searchByMinPriceArray, searchByMaxPriceArray]
       .filter(snapshot => snapshot.length > 0);
 
-    console.log('allSeach:', allSearch);
-
     const responses = _.intersectionBy(...allSearch, 'id');
-
-    console.log('responses:', responses);
 
     const data = responses.map(doc => doc.id);
     return data;

@@ -14,7 +14,6 @@ const BusinessJobsPage = () => {
   const [jobs, setJobs] = useState([]);
 
   const queries = qs.parse(location.search);
-  console.log('queries:', queries);
 
   const searchQuery = queries.query;
 
