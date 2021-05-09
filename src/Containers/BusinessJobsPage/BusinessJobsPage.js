@@ -61,6 +61,10 @@ const BusinessJobsPage = () => {
 
   return (
     <div style={{margin: '20px 40px'}}>
+      {
+        !!searchQuery &&
+        <h1 style={{margin: '140px 0 0 40px'}}>Pencarian untuk <span style={{color: '#3183CD'}}>{searchQuery}</span></h1>
+      }
       {renderJobCards()}
     </div>
   )
