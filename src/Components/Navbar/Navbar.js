@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import './Navbar.css';
 import logo from '../../Assets/images/logo.png'
-import { Grid } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 import { useHistory, useLocation } from 'react-router-dom';
 import {
   Menu,
@@ -148,13 +148,41 @@ const Navbar = () => {
     )
   }
 
+  const handleSearch = (searchString) => {
+    console.log('searchString:', searchString);
+    history.push({
+      search: `?query=${searchString}`,
+      pathname: '/business/'
+    });
+  }
+
   return (
     <div class="navbar-wrapper">
       <Grid container spacing={3}>
         <Grid item xs={1}>
           <img src={logo} alt='logo'/>
         </Grid>
-        <Grid item lg={7} md={6} sm={5} xs={4}></Grid>
+        {
+          currentRole === 'business' ?
+          <>
+            <Grid item lg={4} md={3} sm={2} xs={1}>
+              <TextField
+                id="outlined-search"
+                label="Search field"
+                type="search"
+                variant="outlined"
+                fullWidth="true"
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSearch(e.target.value);
+                  }
+                }}
+              />
+            </Grid>
+            <Grid item xs={3}/>
+          </> :  <Grid item lg={7} md={6} sm={5} xs={4}></Grid>
+        }
         <Grid item lg={4} md={5} sm={6} xs={7}>
           {renderNavbarMenu()}
         </Grid>

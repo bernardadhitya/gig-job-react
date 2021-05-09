@@ -1,22 +1,26 @@
 import { Grid } from '@material-ui/core';
 import React, {useState, useEffect} from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { formattedCurrency, formattedDescription } from '../../Constants/format';
-import { getAllJobs, getImageByJobId } from '../../firebase';
+import { getAllJobs, getImageByJobId, getJobsBySearchString } from '../../firebase';
 import './BusinessJobsPage.css';
 
 const BusinessJobsPage = () => {
   const history = useHistory();
+  const location = useLocation();
 
   const [jobs, setJobs] = useState([]);
+  const searchQuery = location.search.split('=')[1];
+  console.log('search:', searchQuery);
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedJobs = await getAllJobs();
+      const fetchedJobs = !!searchQuery ? 
+        await getJobsBySearchString(searchQuery) : await getAllJobs();
       setJobs(fetchedJobs);
     }
     fetchData();
-  }, []);
+  }, [location]);
 
   const handleClickJob = (job_id) => {
     history.push(`/business/${job_id}`);
