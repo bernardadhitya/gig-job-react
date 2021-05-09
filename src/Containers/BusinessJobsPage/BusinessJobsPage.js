@@ -2,21 +2,26 @@ import { Grid } from '@material-ui/core';
 import React, {useState, useEffect} from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { formattedCurrency, formattedDescription } from '../../Constants/format';
-import { getAllJobs, getImageByJobId, getJobsBySearchString } from '../../firebase';
+import { getAllJobs, getImageByJobId, getJobsByQueries } from '../../firebase';
+import qs from 'query-string';
 import './BusinessJobsPage.css';
+var _ = require('lodash');
 
 const BusinessJobsPage = () => {
   const history = useHistory();
   const location = useLocation();
 
   const [jobs, setJobs] = useState([]);
-  const searchQuery = location.search.split('=')[1];
-  console.log('search:', searchQuery);
+
+  const queries = qs.parse(location.search);
+  console.log('queries:', queries);
+
+  const searchQuery = queries.query;
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedJobs = !!searchQuery ? 
-        await getJobsBySearchString(searchQuery) : await getAllJobs();
+      const fetchedJobs = _.isEmpty(queries) ? 
+        await getAllJobs() : await getJobsByQueries(queries);
       setJobs(fetchedJobs);
     }
     fetchData();

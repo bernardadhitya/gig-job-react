@@ -2,6 +2,7 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
 import { firebaseConfig } from './env';
+var _ = require('lodash');
 
 firebase.initializeApp(firebaseConfig);
 const fireAuth = firebase.auth();
@@ -195,14 +196,53 @@ export const getJobsByCurrentUserIdAndStatus = async (status) => {
   return fetchedJobsByCurrentUser;
 }
 
-export const getJobsBySearchString = async (searchString) => {
+export const getJobsByQueries = async (queries) => {
+  const { query: searchString, minPrice, maxPrice } = queries;
   const getAllId = async () => {
-    const responses = await db.collection('jobs')
+    // const responses = await db.collection('jobs')
+    //   .orderBy('title')
+    //   .startAt(searchString)
+    //   .endAt(searchString + '\uf8ff')
+    //   .get();
+    const searchByString = !!searchString ? db.collection('jobs')
       .orderBy('title')
       .startAt(searchString)
       .endAt(searchString + '\uf8ff')
-      .get();
-    const data = responses.docs.map(doc => doc.id);
+      .get()
+      : undefined;
+    const searchByMinPrice = !!minPrice ? db.collection('jobs')
+      .where('fee', '>=', parseInt(minPrice))
+      .get()
+      : undefined;
+    const searchByMaxPrice = !!maxPrice ? db.collection('jobs')
+      .where('fee', '<=', parseInt(maxPrice))
+      .get()
+      : undefined;
+
+    const [stringSnapshot, minPriceSnapshot, maxPriceSnapshot] = await Promise.all([
+      searchByString,
+      searchByMinPrice,
+      searchByMaxPrice
+    ]);
+
+    const searchByStringArray = !!stringSnapshot ? stringSnapshot.docs : [];
+    const searchByMinPriceArray = !!minPriceSnapshot ? minPriceSnapshot.docs : [];
+    const searchByMaxPriceArray = !!maxPriceSnapshot ? maxPriceSnapshot.docs : [];
+
+    console.log('searchByStringArray:',searchByStringArray)
+    console.log('searchByMinPriceArray:',searchByMinPriceArray)
+    console.log('searchByMaxPriceArray:',searchByMaxPriceArray)
+        
+    const allSearch = [searchByStringArray, searchByMinPriceArray, searchByMaxPriceArray]
+      .filter(snapshot => snapshot.length > 0);
+
+    console.log('allSeach:', allSearch);
+
+    const responses = _.intersectionBy(...allSearch, 'id');
+
+    console.log('responses:', responses);
+
+    const data = responses.map(doc => doc.id);
     return data;
   }
   const allId = await getAllId();
