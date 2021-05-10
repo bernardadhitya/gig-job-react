@@ -413,3 +413,18 @@ export const removeFromWishlist = async (jobId) => {
   return newWishlist;
 }
 
+export const rateJob = async (rating, jobId, requestId) => {
+  const job = await db.collection('jobs')
+    .doc(jobId)
+    .get();
+  await db.collection('requests')
+    .doc(requestId)
+    .update({rating});
+  // await db.collection('jobs')
+  //   .doc(jobId)
+  //   .update({
+  //     rateCount: !!job.rateCount ? job.rateCount + 1 : 1,
+  //     rating: !!job.rating ? (((job.rating * job.rateCount) + rating)/(job.rateCount + 1)) : rating
+  //   })
+}
+

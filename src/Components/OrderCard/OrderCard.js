@@ -1,10 +1,11 @@
-import { Grid } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
+import { Rating } from '@material-ui/lab';
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { actions } from '../../Constants/actions';
 import { formattedCurrency, formattedDescription } from '../../Constants/format';
 import { TRANSLATED_STATUS } from '../../Constants/status';
-import { getImageByJobId, getJobById, updateRequestStatusNextStage, updateRequestStatusToRejected } from '../../firebase';
+import { getImageByJobId, getJobById, rateJob, updateRequestStatusNextStage, updateRequestStatusToRejected } from '../../firebase';
 import InProgressDetailSection from '../OrderCardDetailSections/InProgressDetailSection';
 import RejectedDetailSection from '../OrderCardDetailSections/RejectedDetailSection';
 import WaitingProgressDetailSection from '../OrderCardDetailSections/WaitingProgressDetailSection';
@@ -12,13 +13,14 @@ import './OrderCard.css';
 
 const OrderCard = (props) => {
   const { request, response } = props;
-  const { request_id, job_id, status } = request;
+  const { request_id, job_id, status, rating: rate } = request;
 
   const location = useLocation();
 
   const currentRole = location.pathname.split('/')[1];
 
   const [job, setJob] = useState(null);
+  const [rating, setRating] = useState(rate || 0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,35 +71,62 @@ const OrderCard = (props) => {
     }
   }
 
-  const renderOrderCardActionSection = () => {
-    const actionSections = actions[currentRole][status];
+  const handleRateJob = async (newRating) => {
+    setRating(newRating);
+    await rateJob(newRating, job_id, request_id);
+  }
+
+  const renderDoneActionSection = () => {
     return (
-      <Grid container spacing={1}>
-        {actionSections.map(actionSection => {
-          const { style, color, title, action } = actionSection;
-          return (
-            <Grid item xs={12/actionSections.length}>
-              <div
-                style={{
-                  color: style === 'outline' ? color : 'white',
-                  borderColor: style === 'outline' ? color : 'none',
-                  borderWidth: style === 'outline' ? '1px' : 0,
-                  backgroundColor: style === 'fill' ? color : 'white',
-                  borderStyle: 'solid',
-                  padding: '2px',
-                  borderRadius: '15px',
-                  textAlign: 'center',
-                  margin: '10px',
-                  cursor: 'pointer'
-                }}
-                onClick={() => handleActionClicked(action)}
-              >
-                <h5>{title}</h5>
-              </div>
-            </Grid>
-          )})}
+      <Grid container>
+        <Grid item xs={4}></Grid>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={7}>
+          <p>Beri Penilaian Anda:</p>
+          <Rating
+            name="simple-controlled"
+            value={rating}
+            size="large"
+            onChange={(event, newValue) => {
+              handleRateJob(newValue)
+            }}
+          />
+        </Grid>
       </Grid>
     )
+  }
+
+  const renderOrderCardActionSection = () => {
+    const actionSections = actions[currentRole][status];
+    return currentRole === 'business' && status === 'DONE' ? 
+      renderDoneActionSection() :
+      (
+        <Grid container spacing={1}>
+          {actionSections.map(actionSection => {
+            const { style, color, title, action } = actionSection;
+            return (
+              <Grid item xs={12/actionSections.length}>
+                <div
+                  style={{
+                    color: style === 'outline' ? color : 'white',
+                    borderColor: style === 'outline' ? color : 'none',
+                    borderWidth: style === 'outline' ? '1px' : 0,
+                    backgroundColor: style === 'fill' ? color : 'white',
+                    borderStyle: 'solid',
+                    padding: '2px',
+                    borderRadius: '15px',
+                    textAlign: 'center',
+                    margin: '10px',
+                    cursor: 'pointer'
+                  }}
+                  onClick={() => handleActionClicked(action)}
+                >
+                  <h5>{title}</h5>
+                </div>
+              </Grid>
+            )})}
+        </Grid>
+      )
   }
 
   return job ? (
