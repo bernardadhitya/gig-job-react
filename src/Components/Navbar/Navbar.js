@@ -157,7 +157,11 @@ const Navbar = () => {
     <div class="navbar-wrapper">
       <Grid container spacing={3}>
         <Grid item xs={1}>
-          <img src={logo} alt='logo'/>
+          <img
+            src={logo}
+            alt='logo'
+            style={{cursor: 'pointer'}}
+            onClick={() => {history.push(`/${currentRole}/`)}}/>
         </Grid>
         {
           currentRole === 'business' ?
