@@ -10,6 +10,7 @@ import ServiceJobsPage from '../../Containers/ServiceJobsPage/ServiceJobsPage';
 import ServiceCreateJobPage from '../../Containers/ServiceCreateJobPage/ServiceCreateJobPage';
 import ProfileSettingPage from '../../Containers/ProfileSettingPage/ProfileSettingPage';
 import BusinessWishlistPage from '../../Containers/BusinessWishlishPage/BusinessWishlistPage';
+import ServiceJobDetailPage from '../../Containers/ServiceJobDetailPage/ServiceJobDetailPage';
 
 const DummyPage = () => {
   return (
@@ -40,7 +41,7 @@ const ServiceProviderNavigation = ({match}) => {
       <PrivateRoute path={`${match.url}/chat`} component={DummyPage}/>
       <PrivateRoute exact path={`${match.url}/profil/:id`} component={BusinessJobPosterProfilePage}/>
       <PrivateRoute path={`${match.url}/profil`} component={ProfileSettingPage}/>
-      <PrivateRoute path={`${match.url}/:id`} component={DummyPage}/>
+      <PrivateRoute path={`${match.url}/:id`} component={ServiceJobDetailPage}/>
     </Switch>
   )
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import { formattedCurrency, formattedDescription } from '../../Constants/format';
 import './JobCard.css';
+import { useHistory } from 'react-router';
 
 const JobCard = (props) => {
   const {
@@ -18,12 +19,18 @@ const JobCard = (props) => {
     handleJobStatus
   } = props;
 
+  const history = useHistory();
+
   const renderJobOption = () => {
     return status === 'ACTIVE-JOB' ? (
       <div className='job-card-option-active'>
         <h4>Pekerjaan Aktif</h4>
-        <h6>Detail</h6>
-        <h6>Ubah</h6>
+        <h6
+          style={{cursor: 'pointer'}}
+          onClick={() => {history.push(`/service/${job_id}`)}}
+        >
+          Detail
+        </h6>
         <div
           style={{cursor: 'pointer'}}
           onClick={() => handleJobStatus(job_id, 'INACTIVE-JOB')}
