@@ -104,9 +104,6 @@ const Navbar = () => {
         <div className='item' onClick={() => handleClick('orders')}>
           <h5>Pesanan Pekerjaan</h5>
         </div>
-        <div className='item' onClick={() => handleClick('chat')}>
-          <h5>Chat</h5>
-        </div>
         <div>
           <div
             className='item'
