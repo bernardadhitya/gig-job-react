@@ -76,7 +76,9 @@ const BusinessJobsPage = () => {
         { jobs.map(job => renderJobCard(job)) }
       </Grid>
     ) : (
-      <h3>No data</h3>
+      <div style={{margin: '40px 0 0 40px'}}>
+        <h3>Tidak menemukan pekerjaan</h3>
+      </div>
     )
   }
 
