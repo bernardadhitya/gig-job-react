@@ -43,8 +43,6 @@ const ServiceCreateJobPage = () => {
     await createJobPost(jobData, image);
     history.push('/service');
   }
-
-  console.log(image);
   
   return (
     <div style={{margin: '20px 40px'}}>

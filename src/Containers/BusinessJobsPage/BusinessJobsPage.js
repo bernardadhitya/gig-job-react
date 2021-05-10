@@ -105,7 +105,7 @@ const BusinessJobsPage = () => {
               label="Min Harga"
               variant="outlined"
               fullWidth
-              onChange={e => {tempMinPrice = e.target.value; console.log('tempMinPrice:', tempMinPrice)}}
+              onChange={e => {tempMinPrice = e.target.value}}
             />
           </Grid>
           <Grid item xs={6}>
@@ -114,7 +114,7 @@ const BusinessJobsPage = () => {
               label="Max Harga"
               variant="outlined"
               fullWidth
-              onChange={e => {tempMaxPrice = e.target.value; console.log('tempMaxPrice:', tempMaxPrice)}}
+              onChange={e => {tempMaxPrice = e.target.value}}
             />
           </Grid>
           <Grid item xs={12}>

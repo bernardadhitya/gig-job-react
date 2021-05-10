@@ -24,7 +24,6 @@ const BusinessWishlistPage = () => {
   }
 
   const renderJobCard = (job) => {
-    console.log(job);
     const { job_id, description, fee, title, provider, location, imageUrl } = job;
     const { name: providerName } = provider;
 

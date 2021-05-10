@@ -387,7 +387,6 @@ export const getWishlistByCurrentUserId = async () => {
   const response = await db.collection('wishlists').doc(currentUser.user_id).get();
   const responseId = response.id;
   const responseData = response.data();
-  console.log({ wishlist_id: responseId, ...responseData });
   return { wishlist_id: responseId, ...responseData };
 }
 

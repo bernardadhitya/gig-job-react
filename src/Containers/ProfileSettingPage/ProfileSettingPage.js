@@ -49,7 +49,6 @@ const ProfileSettingPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       const fetchedCurrentUser = await fetchCurrentUser();
-      console.log(fetchedCurrentUser);
       setCurrentUser(fetchedCurrentUser);
     }
     fetchData();
@@ -296,7 +295,6 @@ const ProfileSettingPage = () => {
         </div>
     }
 
-    console.log('currently selected:', label);
     return modalBodies[label]
   }
 

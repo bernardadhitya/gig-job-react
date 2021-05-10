@@ -56,7 +56,6 @@ const Navbar = () => {
     fetchData();
   }, []);
 
-  console.log(currentUser);
 
   const handleProfileClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -173,7 +172,6 @@ const Navbar = () => {
   }
 
   const handleSearch = (searchString) => {
-    console.log('searchString:', searchString);
     history.push({
       search: `?query=${searchString}`,
       pathname: '/business/'

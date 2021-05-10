@@ -29,7 +29,6 @@ const Playlist = (props) => {
 
   const renderTrackCard = (id, name, images, artist, uri) => {
     const { id: userId } = user;
-    console.log(images);
     return ownerId === userId ? (
       <Grid item
         xs={12} sm={6} lg={4}

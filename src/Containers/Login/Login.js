@@ -29,7 +29,6 @@ const Login = () => {
 
   const handleAuthentication = async () => {
     const currentUser = await fetchCurrentUser();
-    console.log(currentUser);
     if (currentUser) {
       history.push('/business');
     } else {
