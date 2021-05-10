@@ -199,7 +199,7 @@ export const getJobsByCurrentUserIdAndStatus = async (status) => {
 export const getJobsByQueries = async (queries) => {
   const { query: searchString, minPrice, maxPrice } = queries;
   const getAllId = async () => {
-    const searchByString = !!searchString ? db.collection('jobs')
+    const searchByString = !!searchString || searchString === '' ? db.collection('jobs')
       .orderBy('title')
       .startAt(searchString)
       .endAt(searchString + '\uf8ff')
