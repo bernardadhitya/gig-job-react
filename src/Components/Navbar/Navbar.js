@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import './Navbar.css';
 import logo from '../../Assets/images/logo.png'
@@ -10,7 +10,8 @@ import {
   ListItemIcon,
   ListItemText
 } from '@material-ui/core';
-import { signOut } from '../../firebase';
+import { fetchCurrentUser, signOut } from '../../firebase';
+import { AccountCircleOutlined, AccountCircleTwoTone } from '@material-ui/icons';
 
 const StyledMenu = withStyles({
   paper: {
@@ -45,6 +46,17 @@ const StyledMenuItem = withStyles((theme) => ({
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedCurrentUser = await fetchCurrentUser();
+      setCurrentUser(fetchedCurrentUser);
+    }
+    fetchData();
+  }, []);
+
+  console.log(currentUser);
 
   const handleProfileClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -118,6 +130,21 @@ const Navbar = () => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
+            <div style={{margin: '0 20px 0 20px'}}>
+              <Grid container>
+                <Grid item xs={3}>
+                  <div style={{marginTop: '20px'}}>
+                    <AccountCircleTwoTone fontSize='large'/>
+                  </div>
+                </Grid>
+                <Grid item xs={9}>
+                  <div className='text-no-margin'>
+                    <h5>{!!currentUser ? currentUser.name : '-'}</h5>
+                    <h6>{currentRole === 'business' ? 'Bisnis' : 'Pekerja'}</h6>
+                  </div>
+                </Grid>
+              </Grid>
+            </div>
             <StyledMenuItem onClick={() => handleRedirectProfile('switch')}>
               <ListItemText
                 primary={currentRole === 'business' ? "Jadi Pekerja" : 'Cari Pekerja'}

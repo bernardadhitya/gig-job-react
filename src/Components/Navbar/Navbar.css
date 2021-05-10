@@ -20,3 +20,11 @@
   margin: 0 10px;
   cursor: pointer;
 }
+
+.text-no-margin h5{
+  margin-bottom: 1px !important;
+}
+
+.text-no-margin h6{
+  margin-top: 1px !important;
+}
