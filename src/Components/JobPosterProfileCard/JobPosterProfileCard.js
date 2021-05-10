@@ -34,7 +34,7 @@ const JobPosterProfileCard = (props) => {
           </Grid>
           <Grid item xs={12}>
             <h4>Tentang Pekerja</h4>
-            <p>{jobPoster.description}</p>
+            <p>{jobPoster.description || '-'}</p>
           </Grid>
         </Grid>
         <Grid container>
@@ -54,88 +54,110 @@ const JobPosterProfileCard = (props) => {
       <div className='job-poster-profile-card-wrapper'>
         <Grid container className='content-wrapper'>
           <Grid item xs={12}>
-            <h2>{jobPoster.name}</h2>
+            <h2>{jobPoster.name || '-'}</h2>
           </Grid>
           <Grid item xs={6}>
             <p>Tanggal Lahir</p>
           </Grid>
           <Grid item xs={6}>
             <p style={{float: 'right'}}>
-              {getDateStringFromTimestamp(jobPoster.dob)}
+              {
+                jobPoster.dob ?
+                  getDateStringFromTimestamp(jobPoster.dob)
+                  : '-'
+              }
             </p>
           </Grid>
           <Grid item xs={6}>
             <p>Gender</p>
           </Grid>
           <Grid item xs={6}>
-            <p style={{float: 'right'}}>{jobPoster.gender === 'm' ? 'Pria' : 'Wanita'}</p>
+            <p style={{float: 'right'}}>
+              {
+                jobPoster.gender ?
+                  jobPoster.gender === 'm' ? 'Pria' : 'Wanita'
+                  : '-'
+              }
+            </p>
           </Grid>
           <Grid item xs={6}>
             <p>Alamat</p>
           </Grid>
           <Grid item xs={6}>
-            <p style={{float: 'right'}}>{jobPoster.address}</p>
+            <p style={{float: 'right'}}>{jobPoster.address || '-'}</p>
           </Grid>
           <Grid item xs={12}>
             <h4>Tentang Pekerja</h4>
-            <p>{jobPoster.description}</p>
+            <p>{jobPoster.description || '-'}</p>
           </Grid>
           <Grid item xs={12}>
             <h4>Pengalaman Kerja</h4>
           </Grid>
-          {jobPoster.experiences.map(experience => (
-            <>
-              <Grid item xs={6}>
-                <p>{experience.title}</p>
-              </Grid>
-              <Grid item xs={6}>
-                <p style={{float: 'right'}}>
-                  {`${getYearFromTimestamp(experience.startDate)} - ${getYearFromTimestamp(experience.endDate)}`}
-                </p>
-              </Grid>
-            </>
-          ))}
+          {
+            jobPoster.experiences ?
+              jobPoster.experiences.map(experience => (
+                <>
+                  <Grid item xs={6}>
+                    <p>{experience.title}</p>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <p style={{float: 'right'}}>
+                      {`${getYearFromTimestamp(experience.startDate)} - ${getYearFromTimestamp(experience.endDate)}`}
+                    </p>
+                  </Grid>
+                </>
+              )) : <Grid item xs={12}><h4>-</h4></Grid>
+          }
           <Grid item xs={12}>
             <h4>Edukasi & Pelatihan</h4>
           </Grid>
-          {jobPoster.educations.map(education => (
-            <>
-              <Grid item xs={6}>
-                <p>{education.title}</p>
-              </Grid>
-              <Grid item xs={6}>
-                <p style={{float: 'right'}}>
-                  {`${getYearFromTimestamp(education.startDate)} - ${getYearFromTimestamp(education.endDate)}`}
-                </p>
-              </Grid>
-            </>
-          ))}
+          {
+            jobPoster.educations ?
+              jobPoster.educations.map(education => (
+                <>
+                  <Grid item xs={6}>
+                    <p>{education.title}</p>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <p style={{float: 'right'}}>
+                      {`${getYearFromTimestamp(education.startDate)} - ${getYearFromTimestamp(education.endDate)}`}
+                    </p>
+                  </Grid>
+                </>
+              )) : <Grid item xs={12}><h4>-</h4></Grid>
+          }
           <Grid item xs={12}>
             <h4>Sertifikasi</h4>
           </Grid>
-          {jobPoster.certifications.map(certification => (
-            <>
-              <Grid item xs={6}>
-                <p>{certification.title}</p>
-              </Grid>
-              <Grid item xs={6}>
-                <p style={{float: 'right'}}>{getYearFromTimestamp(certification.dateIssued)}</p>
-              </Grid>
-            </>
-          ))}
+          {
+            jobPoster.certifications ?
+              jobPoster.certifications.map(certification => (
+                <>
+                  <Grid item xs={6}>
+                    <p>{certification.title}</p>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <p style={{float: 'right'}}>{getYearFromTimestamp(certification.dateIssued)}</p>
+                  </Grid>
+                </>
+              )) : <Grid item xs={12}><h4>-</h4></Grid>
+          }
           <Grid item xs={12}>
             <h4>Bahasa</h4>
           </Grid>
-          {jobPoster.languages.map(language => (
-            <>
-              <Grid item xs={6}>
-                <p>{language.title}</p>
-              </Grid>
-              <Grid item xs={6}>
-                <p style={{float: 'right'}}>{language.level}</p>
-              </Grid>
-            </>
-          ))}
+          {
+            jobPoster.languages ?
+              jobPoster.languages.map(language => (
+                <>
+                  <Grid item xs={6}>
+                    <p>{language.title}</p>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <p style={{float: 'right'}}>{language.level}</p>
+                  </Grid>
+                </>
+              )) : <Grid item xs={12}><h4>-</h4></Grid>
+          }
         </Grid>
       </div>
     )
