@@ -1,6 +1,7 @@
 import { Grid } from '@material-ui/core';
 import React, {useState, useEffect} from 'react';
 import { useHistory } from 'react-router';
+import IconEmpty from '../../Assets/icons/IconEmpty';
 import { formattedCurrency, formattedDescription } from '../../Constants/format';
 import { getAllJobs, getAllJobsInWishlist, getImageByJobId } from '../../firebase';
 import './BusinessWishlistPage.css';
@@ -58,7 +59,23 @@ const BusinessWishlistPage = () => {
   return (
     <div style={{margin: '20px 40px'}}>
       <h1 style={{margin: '140px 0 0 40px'}}>Favorit</h1>
-      {renderJobCards()}
+      { 
+        jobs.length > 0 ? 
+          renderJobCards() :
+          <div style={{
+            marginTop: '120px',
+            textAlign: 'center',
+            alignItems: 'center',
+            paddingLeft: '30%',
+            paddingRight: '30%',
+          }}>
+            <IconEmpty/>
+            <div style={{height: '20px'}}></div>
+            <p>
+            Anda belum menandai pekerjaan favorit anda. 
+            </p>
+          </div>
+      }
     </div>
   )
 }

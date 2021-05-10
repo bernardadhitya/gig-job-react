@@ -5,6 +5,7 @@ import OrderCard from '../../Components/OrderCard/OrderCard';
 import FilterSection from '../../Components/FilterSection/FilterSection';
 import { useLocation } from 'react-router';
 import MuiAlert from '@material-ui/lab/Alert';
+import IconEmpty from '../../Assets/icons/IconEmpty';
 
 const BusinessOrdersPage = () => {
   const [requests, setRequests] = useState([]);
@@ -46,7 +47,22 @@ const BusinessOrdersPage = () => {
       <Grid container spacing={3}>
         <Grid item xs={1}></Grid>
         <Grid item xs={6}>
-          {renderRequestCards()}
+          { 
+            requests.length > 0 ? 
+              renderRequestCards() :
+              <div style={{
+                marginTop: '120px',
+                textAlign: 'center',
+                alignItems: 'center',
+                paddingLeft: '100px',
+                paddingRight: '100px',
+              }}>
+                <IconEmpty/>
+                <p>
+                  Belum ada pekerjaan yang anda pesan saat ini. Silahkan memesan dari beranda utama kami
+                </p>
+              </div>
+          }
         </Grid>
         <Grid item xs={4}>
           <FilterSection

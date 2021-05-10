@@ -5,6 +5,7 @@ import FilterJobs from '../../Components/FilterSection/FilterJobs';
 import JobCard from '../../Components/JobCard/JobCard';
 import MuiAlert from '@material-ui/lab/Alert';
 import { fetchCurrentUser, getJobsByCurrentUserIdAndStatus, updateJobPost } from '../../firebase';
+import IconEmpty from '../../Assets/icons/IconEmpty';
 
 const ServiceJobsPage = () => {
   const [jobs, setJobs] = useState([]);
@@ -51,7 +52,22 @@ const ServiceJobsPage = () => {
       <Grid container spacing={3}>
         <Grid item xs={1}></Grid>
         <Grid item xs={7}>
-          {renderJobs()}
+        { 
+          jobs.length > 0 ? 
+            renderJobs() :
+            <div style={{
+              marginTop: '120px',
+              textAlign: 'center',
+              alignItems: 'center',
+              paddingLeft: '150px',
+              paddingRight: '150px',
+            }}>
+              <IconEmpty/>
+              <p>
+              Pasang iklan pekerjaan anda dan jangan lupa untuk melengkapi profil anda!
+              </p>
+            </div>
+        }
         </Grid>
         <Grid item xs={3}>
           <div className='job-poster-user-card'>
