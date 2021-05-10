@@ -160,7 +160,8 @@ const ServiceCreateJobPage = () => {
                 value={fee}
                 variant="outlined"
                 fullWidth
-                onChange={(e) => setFee(e.target.value)}
+                type="number"
+                onChange={(e) => setFee(parseInt(e.target.value))}
               />
             </Grid>
             <Grid item xs={12}>
