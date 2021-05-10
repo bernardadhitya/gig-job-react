@@ -13,7 +13,7 @@ export const signUp = async (email, password, name) => {
   let userData = {};
   fireAuth.createUserWithEmailAndPassword(email, password)
     .then(async data => {
-      userData = await createUser(data.uid, {name, email});
+      userData = await createUser({name, email});
       console.log('SUCCESS SIGN UP');
     })
     .catch(error => console.log('FAILED SIGNUP'));
@@ -52,9 +52,10 @@ export const getUserByEmail = async (email) => {
   return data;
 }
 
-export const createUser = async (userId, userData) => {
-  const user = await db.collection('users').doc(userId).set(userData);
-  await db.collection('wishlists').doc(userId).set({user_id: userId, wishlist: []});
+export const createUser = async (userData) => {
+  const user = await db.collection('users').add(userData);
+  await db.collection('wishlists').doc(user.id).set({user_id: user.id, wishlist: []});
+  await db.collection('profiles').doc(user.id).set({user_id: user.id, ...userData});
   return user;
 }
 
