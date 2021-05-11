@@ -412,17 +412,37 @@ export const removeFromWishlist = async (jobId) => {
 }
 
 export const rateJob = async (rating, jobId, requestId) => {
+  let ratingFromRequest = {}
+  ratingFromRequest[requestId] = rating;
+
   const job = await db.collection('jobs')
     .doc(jobId)
     .get();
   await db.collection('requests')
     .doc(requestId)
     .update({rating});
-  // await db.collection('jobs')
-  //   .doc(jobId)
-  //   .update({
-  //     rateCount: !!job.rateCount ? job.rateCount + 1 : 1,
-  //     rating: !!job.rating ? (((job.rating * job.rateCount) + rating)/(job.rateCount + 1)) : rating
-  //   })
+  await db.collection('jobs')
+    .doc(jobId)
+    .update({
+      ratings: !!job.ratings ? {
+          ...job.ratings,
+          ...ratingFromRequest
+        } : {
+          ...ratingFromRequest
+        }
+    });
+}
+
+export const getJobRating = async (jobId) => {
+  const response = await db.collection('jobs').doc(jobId).get();
+  const data = response.data();
+  const ratingList = data.ratings || {};
+  let totalRating = 0;
+  for (const raterId in ratingList){
+    totalRating = totalRating + ratingList[raterId]
+  }
+  const rating = totalRating / Object.keys(ratingList).length;
+  const length = Object.keys(ratingList).length
+  return { rating, length }
 }
 

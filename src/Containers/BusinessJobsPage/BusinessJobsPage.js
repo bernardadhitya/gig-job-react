@@ -5,6 +5,9 @@ import { formattedCurrency, formattedDescription } from '../../Constants/format'
 import { getAllJobs, getImageByJobId, getJobsByQueries } from '../../firebase';
 import qs from 'query-string';
 import './BusinessJobsPage.css';
+import StarIcon from '@material-ui/icons/Star';
+import LocationOnIcon from '@material-ui/icons/LocationOn';
+import { getJobRatingByRatingList } from '../../Constants/rating';
 var _ = require('lodash');
 
 const useStyles = makeStyles((theme) => ({
@@ -49,8 +52,20 @@ const BusinessJobsPage = () => {
   }
 
   const renderJobCard = (job) => {
-    const { job_id, description, fee, title, provider, location, imageUrl } = job;
+    const {
+      job_id,
+      description,
+      fee,
+      title,
+      provider,
+      location,
+      imageUrl,
+      ratings
+    } = job;
     const { name: providerName } = provider;
+
+    const jobRating = getJobRatingByRatingList(ratings || {});
+    console.log({job_id, rating: jobRating});
 
     return (
       <Grid item xs={3}>
@@ -64,7 +79,32 @@ const BusinessJobsPage = () => {
           <h3>{formattedCurrency(fee)}</h3>
           <p>{formattedDescription(description)}</p>
           <h5>{providerName}</h5>
-          <p>{location}</p>
+          {
+            jobRating.length > 0 ?
+              <Grid container>
+                <Grid item xs={6}>
+                  <div style={{display: 'flex', alignItems: 'center'}}>
+                    <StarIcon fontSize='small' color='primary'/>
+                    <p>{`${jobRating.rating} (${jobRating.length})`}</p>
+                  </div>
+                </Grid>
+                <Grid item xs={5}>
+                  <div style={{
+                    width: '100%',
+                    textAlign: 'right',
+                    paddingRight: '20px'
+                  }}>
+                    <div style={{display: 'flex', alignItems: 'center'}}>
+                      <LocationOnIcon fontSize='small' color='primary'/>
+                      <p>{location}</p>
+                    </div>
+                  </div>
+                </Grid>
+              </Grid> : <div style={{display: 'flex', alignItems: 'center'}}>
+                <LocationOnIcon fontSize='small' color='primary'/>
+                <p>{location}</p>
+              </div>
+          }
         </div>
       </Grid>
     )
