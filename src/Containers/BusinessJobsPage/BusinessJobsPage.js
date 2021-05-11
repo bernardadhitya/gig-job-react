@@ -65,7 +65,6 @@ const BusinessJobsPage = () => {
     const { name: providerName } = provider;
 
     const jobRating = getJobRatingByRatingList(ratings || {});
-    console.log({job_id, rating: jobRating});
 
     return (
       <Grid item xs={3}>

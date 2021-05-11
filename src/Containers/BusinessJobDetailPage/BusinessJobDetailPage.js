@@ -125,10 +125,10 @@ const BusinessJobDetailPage = () => {
           </Grid>
           <div style={{display: 'flex', alignItems: 'center'}}>
             <p>{job ? `${job.startTime} - ${job.endTime}` : ''}</p>
-            <p style={{width: '20px', textAlign: 'center'}}>•</p>
             {
               jobRating.length > 0 ?
                 <>
+                  <p style={{width: '20px', textAlign: 'center'}}>•</p>
                   <StarIcon fontSize='small' color='primary'/>
                   <p>{`${jobRating.rating} (${jobRating.length})`}</p>
                 </>
