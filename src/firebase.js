@@ -2,6 +2,7 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
 import { firebaseConfig } from './env';
+import { getJobRatingByRatingList } from './Constants/rating';
 var _ = require('lodash');
 
 firebase.initializeApp(firebaseConfig);
@@ -106,9 +107,10 @@ export const getAllJobs = async () => {
   const getAllPost = async (jobIds) => {
     return Promise.all(
       jobIds.map(async (jobId) => {
-        const jobPost = await getJobById(jobId)
-        const imageUrl = await getImageByJobId(jobId)
-        return { ...jobPost, imageUrl };
+        const jobPost = await getJobById(jobId);
+        const imageUrl = await getImageByJobId(jobId);
+        const jobRating = getJobRatingByRatingList(jobPost.ratings || {});
+        return { ...jobPost, imageUrl, jobRating };
       })
     );
   };
@@ -238,7 +240,8 @@ export const getJobsByQueries = async (queries) => {
       jobIds.map(async (jobId) => {
         const jobPost = await getJobById(jobId)
         const imageUrl = await getImageByJobId(jobId)
-        return { ...jobPost, imageUrl };
+        const jobRating = getJobRatingByRatingList(jobPost.ratings || {});
+        return { ...jobPost, imageUrl, jobRating };
       })
     );
   };
